@@ -21,3 +21,14 @@ fun ToDoTaskEntity.toDomain(): ToDoTask =
         priority = priorityId
             .let(Priority::fromId)
     )
+
+fun List<ToDoTaskEntity>.toDomain(): List<ToDoTask> =
+    map(ToDoTaskEntity::toDomain)
+
+fun ToDoTask.toEntity(): ToDoTaskEntity =
+    ToDoTaskEntity(
+        id = id,
+        title = title,
+        description = description,
+        priorityId = priority.id,
+    )
