@@ -13,12 +13,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.to_docompose.R
+import com.example.to_docompose.ui.theme.ComposeLocalWrapper
 
 @Composable
 fun TasksListScreen(
     navigateToTaskDetails: (Int) -> Unit,
 ) {
     Scaffold(
+        topBar = {
+            TasksAppBar()
+        },
         content = { padding ->
             Text(
                 text = "Tasks List",
@@ -50,7 +54,9 @@ fun TasksFab(
 @Composable
 @Preview
 fun TasksListPreview() {
-    TasksListScreen(
-        navigateToTaskDetails = {},
-    )
+    ComposeLocalWrapper {
+        TasksListScreen(
+            navigateToTaskDetails = {},
+        )
+    }
 }
