@@ -14,10 +14,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.to_docompose.R
 import com.example.to_docompose.ui.theme.ComposeLocalWrapper
+import com.example.to_docompose.ui.theme.LocalCustomColorsPalette
 
 @Composable
 fun TasksListScreen(
-    navigateToTaskDetails: (Int) -> Unit,
+    navigateToTaskDetails: (taskId: Int) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -42,7 +43,10 @@ fun TasksListScreen(
 fun TasksFab(
     onClick: () -> Unit,
 ) {
-    FloatingActionButton(onClick = onClick) {
+    FloatingActionButton(
+        onClick = onClick,
+        containerColor = LocalCustomColorsPalette.current.fabBackgroundColor,
+    ) {
         Icon(
             imageVector = Icons.Filled.Add,
             contentDescription = stringResource(R.string.add_button),

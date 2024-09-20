@@ -8,7 +8,7 @@ import com.example.to_docompose.navigation.ToDoTaskAction
 import com.example.to_docompose.ui.screens.tasksList.TasksListScreen
 
 fun NavGraphBuilder.tasksListComposable(
-    navigateToTaskDetails: (Int) -> Unit,
+    navigateToTaskDetails: (taskId: Int) -> Unit,
 ) {
     composable(
         route = "list/{actionId}",
