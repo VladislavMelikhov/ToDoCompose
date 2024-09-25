@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.to_docompose.R
 import com.example.to_docompose.data.models.Priority
+import com.example.to_docompose.ui.shared.SharedViewModel
 import com.example.to_docompose.ui.theme.ComposeLocalWrapper
 import com.example.to_docompose.ui.theme.ContentAlpha
 import com.example.to_docompose.ui.theme.LARGE_PADDING
@@ -43,18 +44,34 @@ import com.example.to_docompose.ui.theme.TOP_APP_BAR_HEIGHT
 import com.example.to_docompose.ui.theme.Typography
 
 @Composable
-fun TasksAppBar() {
-//    DefaultTasksAppBar(
-//        onSearchClick = {},
-//        onSortClick = {},
-//        onDeleteAllClick = {},
-//    )
-    SearchTasksAppBar(
-        text = "",
-        onTextChange = {},
-        onCloseClick = {},
-        onSearchClick = {},
-    )
+fun TasksAppBar(
+    sharedViewModel: SharedViewModel,
+) {
+    val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
+    val searchTextState: String by sharedViewModel.searchTextState
+
+    when (searchAppBarState) {
+        SearchAppBarState.CLOSED -> DefaultTasksAppBar(
+            onSearchClick = {
+                sharedViewModel.searchAppBarState.value =
+                    SearchAppBarState.OPENED
+            },
+            onSortClick = {},
+            onDeleteAllClick = {},
+        )
+        else -> SearchTasksAppBar(
+            text = searchTextState,
+            onTextChange = { newText ->
+                sharedViewModel.searchTextState.value = newText
+            },
+            onCloseClick = {
+                sharedViewModel.searchAppBarState.value =
+                    SearchAppBarState.CLOSED
+                sharedViewModel.searchTextState.value = ""
+            },
+            onSearchClick = {},
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -249,7 +266,13 @@ fun SearchTasksAppBar(
             },
             trailingIcon = {
                 IconButton(
-                    onClick = onCloseClick
+                    onClick = {
+                        if (text.isNotEmpty()) {
+                            onTextChange("")
+                        } else {
+                            onCloseClick()
+                        }
+                    }
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,

@@ -11,18 +11,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.to_docompose.R
-import com.example.to_docompose.ui.theme.ComposeLocalWrapper
+import com.example.to_docompose.ui.shared.SharedViewModel
 import com.example.to_docompose.ui.theme.LocalCustomColorsPalette
 
 @Composable
 fun TasksListScreen(
     navigateToTaskDetails: (taskId: Int) -> Unit,
+    sharedViewModel: SharedViewModel,
 ) {
     Scaffold(
         topBar = {
-            TasksAppBar()
+            TasksAppBar(
+                sharedViewModel = sharedViewModel,
+            )
         },
         content = { padding ->
             Text(
@@ -51,16 +53,6 @@ fun TasksFab(
             imageVector = Icons.Filled.Add,
             contentDescription = stringResource(R.string.add_button),
             tint = Color.White,
-        )
-    }
-}
-
-@Composable
-@Preview
-fun TasksListPreview() {
-    ComposeLocalWrapper {
-        TasksListScreen(
-            navigateToTaskDetails = {},
         )
     }
 }
