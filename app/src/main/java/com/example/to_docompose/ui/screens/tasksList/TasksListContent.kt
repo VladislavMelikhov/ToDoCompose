@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -21,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.to_docompose.data.models.Priority
 import com.example.to_docompose.data.models.ToDoTask
+import com.example.to_docompose.ui.shared.SharedViewModel
 import com.example.to_docompose.ui.theme.LARGE_PADDING
 import com.example.to_docompose.ui.theme.LocalCustomColorsPalette
 import com.example.to_docompose.ui.theme.PRIORITY_INDICATOR_SIZE
@@ -29,7 +33,26 @@ import com.example.to_docompose.ui.theme.TASK_ITEM_ELEVATION
 import com.example.to_docompose.ui.theme.ToDoComposeTheme
 
 @Composable
-fun TasksListContent() {
+fun TasksListContent(
+    sharedViewModel: SharedViewModel,
+    navigateToTaskDetails: (taskId: Int) -> Unit,
+) {
+    val tasks: List<ToDoTask> by sharedViewModel.allTasks.collectAsState()
+
+    LazyColumn {
+        items(
+            count = tasks.size,
+            key = { index ->
+                tasks[index].id
+            },
+            itemContent = { index ->
+                TasksListItem(
+                    toDoTask = tasks[index],
+                    navigateToTaskDetails = navigateToTaskDetails
+                )
+            }
+        )
+    }
 
 }
 

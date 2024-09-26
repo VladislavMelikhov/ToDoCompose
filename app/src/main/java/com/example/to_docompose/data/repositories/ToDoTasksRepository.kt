@@ -1,11 +1,13 @@
 package com.example.to_docompose.data.repositories
 
 import com.example.to_docompose.data.db.ToDoTasksDao
+import com.example.to_docompose.data.models.Priority
 import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.data.models.ToDoTaskEntity
 import com.example.to_docompose.data.models.toDomain
 import com.example.to_docompose.data.models.toEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -14,8 +16,19 @@ class ToDoTasksRepository @Inject constructor(
 ) {
 
     fun getAllTasks(): Flow<List<ToDoTask>> =
-        toDoTasksDao.getAllTasks()
-            .map(List<ToDoTaskEntity>::toDomain)
+        flowOf(
+            (1..100)
+                .map { number ->
+                    ToDoTask(
+                        id = number,
+                        title = "Task $number",
+                        description = "Description of task $number",
+                        priority = Priority.entries[number % Priority.entries.size]
+                    )
+                }
+        )
+//        toDoTasksDao.getAllTasks()
+//            .map(List<ToDoTaskEntity>::toDomain)
 
     fun getTask(taskId: Int): Flow<ToDoTask> =
         toDoTasksDao.getTask(taskId)
