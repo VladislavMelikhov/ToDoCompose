@@ -27,6 +27,8 @@ data class CustomColorsPalette(
     val topAppBarBackgroundColor: Color = Color.Unspecified,
     val topAppBarContentColor: Color = Color.Unspecified,
     val fabBackgroundColor: Color = Color.Unspecified,
+    val taskItemBackgroundColor: Color = Color.Unspecified,
+    val taskItemTextColor: Color = Color.Unspecified,
 ) {
     val statusBarColor: Color
         get() = topAppBarBackgroundColor
@@ -36,12 +38,16 @@ val LightCustomColorsPalette = CustomColorsPalette(
     topAppBarBackgroundColor = Purple40,
     topAppBarContentColor = White,
     fabBackgroundColor = Purple40,
+    taskItemBackgroundColor = White,
+    taskItemTextColor = DarkGray,
 )
 
 val DarkCustomColorsPalette = CustomColorsPalette(
     topAppBarBackgroundColor = Black,
     topAppBarContentColor = LightGray,
     fabBackgroundColor = Purple40,
+    taskItemBackgroundColor = DarkGray,
+    taskItemTextColor = LightGray,
 )
 
 val LocalCustomColorsPalette = staticCompositionLocalOf { CustomColorsPalette() }
