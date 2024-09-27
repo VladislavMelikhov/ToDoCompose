@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
@@ -39,6 +39,21 @@ fun TasksListContent(
 ) {
     val tasks: List<ToDoTask> by sharedViewModel.allTasks.collectAsState()
 
+    if (tasks.isEmpty()) {
+        TasksEmptyContent()
+    } else {
+        TasksList(
+            tasks = tasks,
+            navigateToTaskDetails = navigateToTaskDetails,
+        )
+    }
+}
+
+@Composable
+fun TasksList(
+    tasks: List<ToDoTask>,
+    navigateToTaskDetails: (taskId: Int) -> Unit,
+) {
     LazyColumn {
         items(
             count = tasks.size,
@@ -53,7 +68,6 @@ fun TasksListContent(
             }
         )
     }
-
 }
 
 @Composable
@@ -96,8 +110,7 @@ fun TasksListItem(
                 ) {
                     Canvas(
                         modifier = Modifier
-                            .width(PRIORITY_INDICATOR_SIZE)
-                            .height(PRIORITY_INDICATOR_SIZE),
+                            .size(PRIORITY_INDICATOR_SIZE),
                     ) {
                         drawCircle(
                             color = toDoTask.priority.color,

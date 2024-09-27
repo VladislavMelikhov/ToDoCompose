@@ -17,7 +17,7 @@ class ToDoTasksRepository @Inject constructor(
 
     fun getAllTasks(): Flow<List<ToDoTask>> =
         flowOf(
-            (1..100)
+            (1..0)
                 .map { number ->
                     ToDoTask(
                         id = number,

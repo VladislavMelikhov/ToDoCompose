@@ -11,4 +11,6 @@
     <string name="search">Search</string>
     <string name="search_icon">Search Icon</string>
     <string name="close_icon">Close Icon</string>
+    <string name="empty_list_icon">Empty List Icon</string>
+    <string name="no_tasks_found">No Tasks Found</string>
 </resources>
