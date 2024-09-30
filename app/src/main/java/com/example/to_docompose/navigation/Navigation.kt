@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.example.to_docompose.navigation.destinations.tasksDetailsComposable
+import com.example.to_docompose.navigation.destinations.taskDetailsComposable
 import com.example.to_docompose.navigation.destinations.tasksListComposable
 import com.example.to_docompose.ui.shared.SharedViewModel
 
@@ -25,7 +25,7 @@ fun SetupNavigation(
             navigateToTaskDetails = screens.task,
             sharedViewModel = sharedViewModel,
         )
-        tasksDetailsComposable(
+        taskDetailsComposable(
             navigateToTasksList = screens.list
         )
     }

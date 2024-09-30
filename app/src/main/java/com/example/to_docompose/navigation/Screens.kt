@@ -4,8 +4,8 @@ import androidx.navigation.NavHostController
 
 class Screens(navController: NavHostController) {
 
-    val list: (Int) -> Unit = { actionId ->
-        navController.navigate(route = "list/$actionId") {
+    val list: (ToDoTaskAction) -> Unit = { action ->
+        navController.navigate(route = "list/${action.id}") {
             popUpTo("list") { inclusive = true }
         }
     }
