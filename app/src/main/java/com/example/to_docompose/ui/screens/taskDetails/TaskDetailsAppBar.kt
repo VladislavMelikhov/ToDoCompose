@@ -24,11 +24,19 @@ import com.example.to_docompose.ui.theme.ToDoComposeTheme
 
 @Composable
 fun TaskDetailsAppBar(
+    selectedTask: ToDoTask?,
     navigateToTasksList: (ToDoTaskAction) -> Unit,
 ) {
-    NewTaskAppBar(
-        navigateToTasksList = navigateToTasksList,
-    )
+    if (selectedTask == null) {
+        NewTaskAppBar(
+            navigateToTasksList = navigateToTasksList,
+        )
+    } else {
+        ExistingTaskAppBar(
+            task = selectedTask,
+            navigateToTasksList = navigateToTasksList,
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
