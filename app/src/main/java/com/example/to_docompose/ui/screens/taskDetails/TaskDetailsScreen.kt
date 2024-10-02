@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.to_docompose.data.models.Priority
 import com.example.to_docompose.navigation.ToDoTaskAction
 
 const val TASK_DETAILS_ARG_KEY = "taskId"
@@ -33,7 +34,10 @@ fun TaskDetailsScreen(
                     .fillMaxSize()
                     .padding(padding),
             ) {
-
+                PriorityDropDown(
+                    selectedPriority = Priority.MEDIUM,
+                    onPrioritySelected = {},
+                )
             }
         },
     )
