@@ -47,7 +47,7 @@ fun TasksEmptyContent() {
 
 @Composable
 @Preview
-fun TasksEmptyContentPreview() {
+private fun TasksEmptyContentPreview() {
     ToDoComposeTheme(darkTheme = false) {
         TasksEmptyContent()
     }

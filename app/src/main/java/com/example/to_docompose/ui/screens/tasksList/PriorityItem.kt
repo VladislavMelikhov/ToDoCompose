@@ -43,7 +43,7 @@ fun PriorityItem(
 
 @Composable
 @Preview
-fun PriorityItemPreview() {
+private fun PriorityItemPreview() {
     ComposeLocalWrapper {
         PriorityItem(
             priority = Priority.MEDIUM,

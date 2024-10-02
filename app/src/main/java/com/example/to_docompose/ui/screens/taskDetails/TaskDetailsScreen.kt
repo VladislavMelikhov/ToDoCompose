@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.to_docompose.navigation.ToDoTaskAction
 
+const val TASK_DETAILS_ARG_KEY = "taskId"
+
 @Composable
 fun TaskDetailsScreen(
     viewModel: TaskDetailsViewModel = hiltViewModel(),

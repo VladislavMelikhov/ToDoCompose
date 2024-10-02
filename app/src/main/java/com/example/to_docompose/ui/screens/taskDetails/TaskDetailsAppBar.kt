@@ -41,7 +41,7 @@ fun TaskDetailsAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewTaskAppBar(
+private fun NewTaskAppBar(
     navigateToTasksList: (ToDoTaskAction) -> Unit,
 ) {
     TopAppBar(
@@ -68,7 +68,7 @@ fun NewTaskAppBar(
 }
 
 @Composable
-fun BackAction(
+private fun BackAction(
     onClick: () -> Unit,
 ) {
     IconButton(
@@ -83,7 +83,7 @@ fun BackAction(
 }
 
 @Composable
-fun AddAction(
+private fun AddAction(
     onClick: () -> Unit,
 ) {
     IconButton(
@@ -99,7 +99,7 @@ fun AddAction(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExistingTaskAppBar(
+private fun ExistingTaskAppBar(
     task: ToDoTask,
     navigateToTasksList: (ToDoTaskAction) -> Unit,
 ) {
@@ -132,7 +132,7 @@ fun ExistingTaskAppBar(
 }
 
 @Composable
-fun CloseAction(
+private fun CloseAction(
     onClick: () -> Unit,
 ) {
     IconButton(
@@ -147,7 +147,7 @@ fun CloseAction(
 }
 
 @Composable
-fun DeleteAction(
+private fun DeleteAction(
     onClick: () -> Unit,
 ) {
     IconButton(
@@ -162,7 +162,7 @@ fun DeleteAction(
 }
 
 @Composable
-fun UpdateAction(
+private fun UpdateAction(
     onClick: () -> Unit,
 ) {
     IconButton(
@@ -178,7 +178,7 @@ fun UpdateAction(
 
 @Composable
 @Preview
-fun NewTaskAppBarPreview() {
+private fun NewTaskAppBarPreview() {
     ToDoComposeTheme(darkTheme = false) {
         NewTaskAppBar(
             navigateToTasksList = {},
@@ -188,7 +188,7 @@ fun NewTaskAppBarPreview() {
 
 @Composable
 @Preview
-fun ExistingTaskAppBarPreview() {
+private fun ExistingTaskAppBarPreview() {
     ToDoComposeTheme(darkTheme = false) {
         ExistingTaskAppBar(
             task = ToDoTask(

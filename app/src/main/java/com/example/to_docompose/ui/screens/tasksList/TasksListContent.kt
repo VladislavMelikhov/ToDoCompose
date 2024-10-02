@@ -49,7 +49,7 @@ fun TasksListContent(
 }
 
 @Composable
-fun TasksList(
+private fun TasksList(
     tasks: List<ToDoTask>,
     navigateToTaskDetails: (taskId: Int) -> Unit,
 ) {
@@ -70,7 +70,7 @@ fun TasksList(
 }
 
 @Composable
-fun TasksListItem(
+private fun TasksListItem(
     toDoTask: ToDoTask,
     navigateToTaskDetails: (taskId: Int) -> Unit,
 ) {
@@ -133,7 +133,7 @@ fun TasksListItem(
 
 @Composable
 @Preview
-fun TasksListItemPreview() {
+private fun TasksListItemPreview() {
     ToDoComposeTheme(darkTheme = false) {
         TasksListItem(
             toDoTask = ToDoTask(

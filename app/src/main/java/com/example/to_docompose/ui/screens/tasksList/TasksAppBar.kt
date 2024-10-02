@@ -75,7 +75,7 @@ fun TasksAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DefaultTasksAppBar(
+private fun DefaultTasksAppBar(
     onSearchClick: () -> Unit,
     onSortClick: (Priority) -> Unit,
     onDeleteAllClick: () -> Unit,
@@ -101,7 +101,7 @@ fun DefaultTasksAppBar(
 }
 
 @Composable
-fun TasksAppBarActions(
+private fun TasksAppBarActions(
     onSearchClick: () -> Unit,
     onSortClick: (Priority) -> Unit,
     onDeleteAllClick: () -> Unit,
@@ -118,7 +118,7 @@ fun TasksAppBarActions(
 }
 
 @Composable
-fun SearchAction(
+private fun SearchAction(
     onSearchClick: () -> Unit,
 ) {
     IconButton(
@@ -133,7 +133,7 @@ fun SearchAction(
 }
 
 @Composable
-fun SortAction(
+private fun SortAction(
     onSortClick: (Priority) -> Unit,
 ) {
     var expanded: Boolean by remember { mutableStateOf(false) }
@@ -182,7 +182,7 @@ fun SortAction(
 }
 
 @Composable
-fun DeleteAllAction(
+private fun DeleteAllAction(
     onDeleteAllClick: () -> Unit,
 ) {
     var expanded: Boolean by remember { mutableStateOf(false) }
@@ -219,7 +219,7 @@ fun DeleteAllAction(
 }
 
 @Composable
-fun SearchTasksAppBar(
+private fun SearchTasksAppBar(
     text: String,
     onTextChange: (String) -> Unit,
     onCloseClick: () -> Unit,
@@ -304,7 +304,7 @@ fun SearchTasksAppBar(
 
 @Composable
 @Preview
-fun DefaultTasksAppBarPreview() {
+private fun DefaultTasksAppBarPreview() {
     ComposeLocalWrapper {
         DefaultTasksAppBar(
             onSearchClick = {},
@@ -316,7 +316,7 @@ fun DefaultTasksAppBarPreview() {
 
 @Composable
 @Preview
-fun SearchTasksAppBarPreview() {
+private fun SearchTasksAppBarPreview() {
     ComposeLocalWrapper {
         SearchTasksAppBar(
             text = "",

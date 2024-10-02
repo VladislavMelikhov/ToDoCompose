@@ -16,6 +16,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.to_docompose.R
 import com.example.to_docompose.ui.theme.LocalCustomColorsPalette
 
+const val TASKS_LIST_ARG_KEY = "actionId"
+
 @Composable
 fun TasksListScreen(
     navigateToTaskDetails: (taskId: Int) -> Unit,
@@ -48,7 +50,7 @@ fun TasksListScreen(
 }
 
 @Composable
-fun TasksFab(
+private fun TasksFab(
     onClick: () -> Unit,
 ) {
     FloatingActionButton(
