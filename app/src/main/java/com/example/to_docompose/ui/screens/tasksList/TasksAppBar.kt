@@ -35,7 +35,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.to_docompose.R
 import com.example.to_docompose.data.models.Priority
-import com.example.to_docompose.ui.shared.SharedViewModel
 import com.example.to_docompose.ui.theme.ComposeLocalWrapper
 import com.example.to_docompose.ui.theme.ContentAlpha
 import com.example.to_docompose.ui.theme.LARGE_PADDING
@@ -45,15 +44,15 @@ import com.example.to_docompose.ui.theme.Typography
 
 @Composable
 fun TasksAppBar(
-    sharedViewModel: SharedViewModel,
+    viewModel: TasksListViewModel,
 ) {
-    val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
-    val searchTextState: String by sharedViewModel.searchTextState
+    val searchAppBarState: SearchAppBarState by viewModel.searchAppBarState
+    val searchTextState: String by viewModel.searchTextState
 
     when (searchAppBarState) {
         SearchAppBarState.CLOSED -> DefaultTasksAppBar(
             onSearchClick = {
-                sharedViewModel.searchAppBarState.value =
+                viewModel.searchAppBarState.value =
                     SearchAppBarState.OPENED
             },
             onSortClick = {},
@@ -62,12 +61,12 @@ fun TasksAppBar(
         else -> SearchTasksAppBar(
             text = searchTextState,
             onTextChange = { newText ->
-                sharedViewModel.searchTextState.value = newText
+                viewModel.searchTextState.value = newText
             },
             onCloseClick = {
-                sharedViewModel.searchAppBarState.value =
+                viewModel.searchAppBarState.value =
                     SearchAppBarState.CLOSED
-                sharedViewModel.searchTextState.value = ""
+                viewModel.searchTextState.value = ""
             },
             onSearchClick = {},
         )

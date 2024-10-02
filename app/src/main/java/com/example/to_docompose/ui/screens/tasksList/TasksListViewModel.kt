@@ -1,4 +1,4 @@
-package com.example.to_docompose.ui.shared
+package com.example.to_docompose.ui.screens.tasksList
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.data.repositories.ToDoTasksRepository
-import com.example.to_docompose.ui.screens.tasksList.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,12 +14,12 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class SharedViewModel @Inject constructor(
+class TasksListViewModel @Inject constructor(
     private val toDoTasksRepository: ToDoTasksRepository,
 ) : ViewModel() {
 
     companion object {
-        private const val TAG = "SharedViewModel"
+        private const val TAG = "TasksListViewModel"
     }
 
     init {

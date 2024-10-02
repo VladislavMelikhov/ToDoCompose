@@ -12,19 +12,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.to_docompose.R
-import com.example.to_docompose.ui.shared.SharedViewModel
 import com.example.to_docompose.ui.theme.LocalCustomColorsPalette
 
 @Composable
 fun TasksListScreen(
     navigateToTaskDetails: (taskId: Int) -> Unit,
-    sharedViewModel: SharedViewModel,
+    viewModel: TasksListViewModel = hiltViewModel(),
 ) {
     Scaffold(
         topBar = {
             TasksAppBar(
-                sharedViewModel = sharedViewModel,
+                viewModel = viewModel,
             )
         },
         content = { padding ->
@@ -34,7 +34,7 @@ fun TasksListScreen(
                     .padding(padding),
             ) {
                 TasksListContent(
-                    sharedViewModel = sharedViewModel,
+                    viewModel = viewModel,
                     navigateToTaskDetails = navigateToTaskDetails,
                 )
             }

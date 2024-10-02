@@ -24,7 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.to_docompose.data.models.Priority
 import com.example.to_docompose.data.models.ToDoTask
-import com.example.to_docompose.ui.shared.SharedViewModel
 import com.example.to_docompose.ui.theme.LARGE_PADDING
 import com.example.to_docompose.ui.theme.LocalCustomColorsPalette
 import com.example.to_docompose.ui.theme.PRIORITY_INDICATOR_SIZE
@@ -34,10 +33,10 @@ import com.example.to_docompose.ui.theme.ToDoComposeTheme
 
 @Composable
 fun TasksListContent(
-    sharedViewModel: SharedViewModel,
+    viewModel: TasksListViewModel,
     navigateToTaskDetails: (taskId: Int) -> Unit,
 ) {
-    val tasks: List<ToDoTask> by sharedViewModel.allTasks.collectAsState()
+    val tasks: List<ToDoTask> by viewModel.allTasks.collectAsState()
 
     if (tasks.isEmpty()) {
         TasksEmptyContent()
