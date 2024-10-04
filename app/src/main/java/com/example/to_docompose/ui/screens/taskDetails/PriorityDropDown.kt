@@ -30,9 +30,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import com.example.to_docompose.R
 import com.example.to_docompose.data.models.Priority
 import com.example.to_docompose.ui.screens.tasksList.PriorityItem
@@ -55,6 +59,8 @@ fun PriorityDropDown(
         label = "Drop-Down Arrow Icon Animation",
     )
 
+    var rowSize by remember { mutableStateOf(Size.Zero) }
+
     Row(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
@@ -65,7 +71,10 @@ fun PriorityDropDown(
                 width = 1.dp,
                 color = OutlinedTextFieldDefaults.colors().unfocusedIndicatorColor,
                 shape = MaterialTheme.shapes.extraSmall,
-            ),
+            )
+            .onGloballyPositioned { layoutCoordinates ->
+                rowSize = layoutCoordinates.size.toSize()
+            },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -100,7 +109,7 @@ fun PriorityDropDown(
         }
         DropdownMenu(
             modifier = Modifier
-                .fillMaxWidth(fraction = 0.94f),
+                .width(with(LocalDensity.current) { rowSize.width.toDp() }),
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
