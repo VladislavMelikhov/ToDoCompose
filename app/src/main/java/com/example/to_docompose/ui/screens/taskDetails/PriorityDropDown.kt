@@ -2,6 +2,7 @@ package com.example.to_docompose.ui.screens.taskDetails
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -55,12 +57,14 @@ fun PriorityDropDown(
 
     Row(
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxWidth()
             .height(PRIORITY_DROP_DOWN_HEIGHT)
             .clickable { expanded = true }
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.DISABLED),
+                color = OutlinedTextFieldDefaults.colors().unfocusedIndicatorColor,
+                shape = MaterialTheme.shapes.extraSmall,
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -81,6 +85,7 @@ fun PriorityDropDown(
                 .weight(1f),
             text = stringResource(selectedPriority.titleId),
             style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurface,
         )
         IconButton(
             modifier = Modifier
@@ -95,7 +100,7 @@ fun PriorityDropDown(
         }
         DropdownMenu(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth(fraction = 0.94f),
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {

@@ -34,8 +34,12 @@ fun TaskDetailsScreen(
                     .fillMaxSize()
                     .padding(padding),
             ) {
-                PriorityDropDown(
-                    selectedPriority = Priority.MEDIUM,
+                TaskDetailsContent(
+                    title = "",
+                    onTitleChange = {},
+                    description = "",
+                    onDescriptionChange = {},
+                    priority = Priority.HIGH,
                     onPrioritySelected = {},
                 )
             }
