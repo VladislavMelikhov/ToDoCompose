@@ -19,9 +19,9 @@ class ToDoTasksRepositoryImpl @Inject constructor(
         toDoTasksDao.getAllTasks()
             .map(List<ToDoTaskEntity>::toDomain)
 
-    override fun getTask(taskId: Int): Flow<ToDoTask> =
+    override suspend fun getTask(taskId: Int): ToDoTask =
         toDoTasksDao.getTask(taskId)
-            .map(ToDoTaskEntity::toDomain)
+            .let(ToDoTaskEntity::toDomain)
 
     override suspend fun addTask(task: ToDoTask) {
         val taskEntity = task.toEntity()

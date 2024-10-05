@@ -9,7 +9,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.to_docompose.data.models.Priority
 import com.example.to_docompose.navigation.ToDoTaskAction
 
 const val TASK_DETAILS_ARG_KEY = "taskId"
@@ -20,6 +19,10 @@ fun TaskDetailsScreen(
     navigateToTasksList: (ToDoTaskAction) -> Unit,
 ) {
     val selectedTask by viewModel.selectedTask.collectAsState()
+
+    val editedTitle by viewModel.editedTitle.collectAsState()
+    val editedDescription by viewModel.editedDescription.collectAsState()
+    val editedPriority by viewModel.editedPriority.collectAsState()
 
     Scaffold(
         topBar = {
@@ -35,12 +38,12 @@ fun TaskDetailsScreen(
                     .padding(padding),
             ) {
                 TaskDetailsContent(
-                    title = "",
-                    onTitleChange = {},
-                    description = "",
-                    onDescriptionChange = {},
-                    priority = Priority.HIGH,
-                    onPrioritySelected = {},
+                    title = editedTitle,
+                    onTitleChange = viewModel.editedTitle::value::set,
+                    description = editedDescription,
+                    onDescriptionChange = viewModel.editedDescription::value::set,
+                    priority = editedPriority,
+                    onPrioritySelected = viewModel.editedPriority::value::set,
                 )
             }
         },

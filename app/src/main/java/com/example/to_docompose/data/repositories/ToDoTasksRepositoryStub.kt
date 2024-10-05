@@ -25,12 +25,9 @@ class ToDoTasksRepositoryStub @Inject constructor() : ToDoTasksRepository {
     override fun getAllTasks(): Flow<List<ToDoTask>> =
         flowOf(tasks)
 
-    override fun getTask(taskId: Int): Flow<ToDoTask> =
-        flow {
-            tasks
-                .firstOrNull { task -> task.id == taskId }
-                ?.let { task -> emit(task) }
-        }
+    override suspend fun getTask(taskId: Int): ToDoTask =
+        tasks
+            .first { task -> task.id == taskId }
 
     override suspend fun addTask(task: ToDoTask) {
         TODO("Not yet implemented")

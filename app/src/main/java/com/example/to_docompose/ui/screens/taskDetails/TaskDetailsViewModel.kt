@@ -4,12 +4,15 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.to_docompose.data.models.Priority
 import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.data.repositories.ToDoTasksRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -31,15 +34,31 @@ class TaskDetailsViewModel @Inject constructor(
         requireNotNull(savedStateHandle["taskId"])
 
     val selectedTask: StateFlow<ToDoTask?> =
-        _selectedTaskId
-            .let { taskId ->
-                if (taskId > 0) {
-                    toDoTasksRepository.getTask(taskId)
-                } else {
-                    flowOf(null)
+        flow {
+            if (_selectedTaskId > 0) {
+                val selectedTask = toDoTasksRepository.getTask(_selectedTaskId)
+                emit(selectedTask)
+            } else {
+                emit(null)
+            }
+        }
+            .onEach { task ->
+                if (task != null) {
+                    editedTitle.value = task.title
+                    editedDescription.value = task.description
+                    editedPriority.value = task.priority
                 }
             }
             .stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+    val editedTitle: MutableStateFlow<String> =
+        MutableStateFlow("")
+
+    val editedDescription: MutableStateFlow<String> =
+        MutableStateFlow("")
+
+    val editedPriority: MutableStateFlow<Priority> =
+        MutableStateFlow(Priority.MEDIUM)
 
     override fun onCleared() {
         Log.d(TAG, "onCleared")

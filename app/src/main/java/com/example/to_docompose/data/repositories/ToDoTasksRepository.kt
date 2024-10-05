@@ -7,7 +7,7 @@ interface ToDoTasksRepository {
 
     fun getAllTasks(): Flow<List<ToDoTask>>
 
-    fun getTask(taskId: Int): Flow<ToDoTask>
+    suspend fun getTask(taskId: Int): ToDoTask
 
     suspend fun addTask(task: ToDoTask)
 
