@@ -23,6 +23,8 @@ class TaskDetailsViewModel @Inject constructor(
 ) : ViewModel() {
 
     companion object {
+        private const val TITLE_MAX_LENGTH = 20
+
         private const val TAG = "TaskDetailsViewModel"
     }
 
@@ -44,21 +46,33 @@ class TaskDetailsViewModel @Inject constructor(
         }
             .onEach { task ->
                 if (task != null) {
-                    editedTitle.value = task.title
-                    editedDescription.value = task.description
-                    editedPriority.value = task.priority
+                    setEditedTitle(task.title)
+                    setEditedDescription(task.description)
+                    setEditedPriority(task.priority)
                 }
             }
             .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
-    val editedTitle: MutableStateFlow<String> =
-        MutableStateFlow("")
+    private val _editedTitle: MutableStateFlow<String> = MutableStateFlow("")
+    val editedTitle: StateFlow<String> = _editedTitle
 
-    val editedDescription: MutableStateFlow<String> =
-        MutableStateFlow("")
+    private val _editedDescription: MutableStateFlow<String> = MutableStateFlow("")
+    val editedDescription: StateFlow<String> = _editedDescription
 
-    val editedPriority: MutableStateFlow<Priority> =
-        MutableStateFlow(Priority.MEDIUM)
+    private val _editedPriority: MutableStateFlow<Priority> = MutableStateFlow(Priority.MEDIUM)
+    val editedPriority: StateFlow<Priority> = _editedPriority
+
+    fun setEditedTitle(title: String) {
+        _editedTitle.value = title.take(TITLE_MAX_LENGTH)
+    }
+
+    fun setEditedDescription(description: String) {
+        _editedDescription.value = description
+    }
+
+    fun setEditedPriority(priority: Priority) {
+        _editedPriority.value = priority
+    }
 
     override fun onCleared() {
         Log.d(TAG, "onCleared")

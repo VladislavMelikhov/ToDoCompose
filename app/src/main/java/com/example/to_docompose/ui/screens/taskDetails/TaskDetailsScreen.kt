@@ -39,11 +39,11 @@ fun TaskDetailsScreen(
             ) {
                 TaskDetailsContent(
                     title = editedTitle,
-                    onTitleChange = viewModel.editedTitle::value::set,
+                    onTitleChange = viewModel::setEditedTitle,
                     description = editedDescription,
-                    onDescriptionChange = viewModel.editedDescription::value::set,
+                    onDescriptionChange = viewModel::setEditedDescription,
                     priority = editedPriority,
-                    onPrioritySelected = viewModel.editedPriority::value::set,
+                    onPrioritySelected = viewModel::setEditedPriority,
                 )
             }
         },
