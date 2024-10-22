@@ -8,8 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.to_docompose.navigation.ToDoTaskAction
+import com.example.to_docompose.utils.ToastManager
 
 const val TASK_DETAILS_ARG_KEY = "taskId"
 
@@ -24,11 +26,27 @@ fun TaskDetailsScreen(
     val editedDescription by viewModel.editedDescription.collectAsState()
     val editedPriority by viewModel.editedPriority.collectAsState()
 
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             TaskDetailsAppBar(
                 selectedTask = selectedTask,
-                navigateToTasksList = navigateToTasksList,
+                navigateToTasksList = { action ->
+                    if (!needToValidateFields(action)) {
+                        navigateToTasksList(action)
+                        return@TaskDetailsAppBar
+                    }
+
+                    when (val validationResult = viewModel.validateFields()) {
+                        is ValidationResult.Error -> {
+                            ToastManager.showShort(context, validationResult.messageId)
+                        }
+                        is ValidationResult.Success -> {
+                            navigateToTasksList(action)
+                        }
+                    }
+                },
             )
         },
         content = { padding ->
@@ -48,4 +66,9 @@ fun TaskDetailsScreen(
             }
         },
     )
+}
+
+private fun needToValidateFields(action: ToDoTaskAction): Boolean {
+    return action == ToDoTaskAction.ADD ||
+            action == ToDoTaskAction.UPDATE
 }

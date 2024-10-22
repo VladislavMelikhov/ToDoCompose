@@ -20,4 +20,6 @@
     <string name="drop_down_arrow_icon">Drop-Down Arrow Icon</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
+    <string name="title_is_empty">Title is empty</string>
+    <string name="description_is_empty">Description is empty</string>
 </resources>
