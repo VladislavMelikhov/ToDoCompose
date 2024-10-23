@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.navigation.ToDoTaskAction
 import com.example.to_docompose.utils.ToastManager
 
@@ -45,6 +46,19 @@ fun TaskDetailsScreen(
                         is ValidationResult.Success -> {
                             navigateToTasksList(action)
                         }
+                    }
+
+                    when (action) {
+                        ToDoTaskAction.ADD -> {
+                            val newTask = ToDoTask(
+                                id = 0,
+                                title = editedTitle,
+                                description = editedDescription,
+                                priority = editedPriority,
+                            )
+                            viewModel.addTask(newTask)
+                        }
+                        else -> {}
                     }
                 },
             )

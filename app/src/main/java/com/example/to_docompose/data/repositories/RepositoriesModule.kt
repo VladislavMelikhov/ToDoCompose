@@ -10,5 +10,5 @@ import dagger.hilt.components.SingletonComponent
 interface RepositoriesModule {
 
     @Binds
-    fun toDoTaskRepository(impl: ToDoTasksRepositoryStub): ToDoTasksRepository
+    fun toDoTaskRepository(impl: ToDoTasksRepositoryImpl): ToDoTasksRepository
 }

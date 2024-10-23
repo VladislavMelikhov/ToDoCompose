@@ -8,6 +8,7 @@ import com.example.to_docompose.R
 import com.example.to_docompose.data.models.Priority
 import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.data.repositories.ToDoTasksRepository
+import com.example.to_docompose.utils.coroutines.ApplicationScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -15,11 +16,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val applicationScope: ApplicationScope,
     private val toDoTasksRepository: ToDoTasksRepository,
 ) : ViewModel() {
 
@@ -87,6 +90,12 @@ class TaskDetailsViewModel @Inject constructor(
         }
 
         return ValidationResult.Success
+    }
+
+    fun addTask(task: ToDoTask) {
+        applicationScope.launch {
+            toDoTasksRepository.addTask(task)
+        }
     }
 
     override fun onCleared() {
