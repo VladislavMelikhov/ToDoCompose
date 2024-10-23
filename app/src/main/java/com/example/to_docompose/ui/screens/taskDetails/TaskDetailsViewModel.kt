@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.to_docompose.R
 import com.example.to_docompose.data.models.Priority
 import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.data.repositories.ToDoTasksRepository
@@ -76,20 +75,6 @@ class TaskDetailsViewModel @Inject constructor(
 
     fun setEditedPriority(priority: Priority) {
         _editedPriority.value = priority
-    }
-
-    fun validateFields(): ValidationResult {
-        val title = _editedTitle.value
-        if (title.isBlank()) {
-            return ValidationResult.Error(R.string.title_is_empty)
-        }
-
-        val description = _editedDescription.value
-        if (description.isBlank()) {
-            return ValidationResult.Error(R.string.description_is_empty)
-        }
-
-        return ValidationResult.Success
     }
 
     fun addTask(task: ToDoTask) {

@@ -18,23 +18,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.to_docompose.R
 import com.example.to_docompose.data.models.Priority
 import com.example.to_docompose.data.models.ToDoTask
-import com.example.to_docompose.navigation.ToDoTaskAction
 import com.example.to_docompose.ui.theme.LocalCustomColorsPalette
 import com.example.to_docompose.ui.theme.ToDoComposeTheme
 
 @Composable
 fun TaskDetailsAppBar(
     selectedTask: ToDoTask?,
-    navigateToTasksList: (ToDoTaskAction) -> Unit,
+    onBackClick: () -> Unit,
+    onAddClick: () -> Unit,
+    onCloseClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+    onUpdateClick: () -> Unit,
 ) {
     if (selectedTask == null) {
         NewTaskAppBar(
-            navigateToTasksList = navigateToTasksList,
+            onBackClick = onBackClick,
+            onAddClick = onAddClick,
         )
     } else {
         ExistingTaskAppBar(
             task = selectedTask,
-            navigateToTasksList = navigateToTasksList,
+            onCloseClick = onCloseClick,
+            onDeleteClick = onDeleteClick,
+            onUpdateClick = onUpdateClick,
         )
     }
 }
@@ -42,12 +48,13 @@ fun TaskDetailsAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun NewTaskAppBar(
-    navigateToTasksList: (ToDoTaskAction) -> Unit,
+    onBackClick: () -> Unit,
+    onAddClick: () -> Unit,
 ) {
     TopAppBar(
         navigationIcon = {
             BackAction(
-                onClick = { navigateToTasksList(ToDoTaskAction.NO_ACTION) },
+                onClick = { onBackClick() },
             )
         },
         title = {
@@ -61,7 +68,7 @@ private fun NewTaskAppBar(
         ),
         actions = {
             AddAction(
-                onClick = { navigateToTasksList(ToDoTaskAction.ADD) },
+                onClick = { onAddClick() },
             )
         },
     )
@@ -101,12 +108,14 @@ private fun AddAction(
 @Composable
 private fun ExistingTaskAppBar(
     task: ToDoTask,
-    navigateToTasksList: (ToDoTaskAction) -> Unit,
+    onCloseClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+    onUpdateClick: () -> Unit,
 ) {
     TopAppBar(
         navigationIcon = {
             CloseAction(
-                onClick = { navigateToTasksList(ToDoTaskAction.NO_ACTION) },
+                onClick = { onCloseClick() },
             )
         },
         title = {
@@ -122,10 +131,10 @@ private fun ExistingTaskAppBar(
         ),
         actions = {
             DeleteAction(
-                onClick = { navigateToTasksList(ToDoTaskAction.DELETE) }
+                onClick = { onDeleteClick() }
             )
             UpdateAction(
-                onClick = { navigateToTasksList(ToDoTaskAction.UPDATE) }
+                onClick = { onUpdateClick() }
             )
         },
     )
@@ -181,7 +190,8 @@ private fun UpdateAction(
 private fun NewTaskAppBarPreview() {
     ToDoComposeTheme(darkTheme = false) {
         NewTaskAppBar(
-            navigateToTasksList = {},
+            onBackClick = {},
+            onAddClick = {},
         )
     }
 }
@@ -197,7 +207,9 @@ private fun ExistingTaskAppBarPreview() {
                 description = "Task description",
                 priority = Priority.MEDIUM,
             ),
-            navigateToTasksList = {},
+            onCloseClick = {},
+            onDeleteClick = {},
+            onUpdateClick = {},
         )
     }
 }

@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.to_docompose.R
 import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.navigation.ToDoTaskAction
 import com.example.to_docompose.utils.ToastManager
@@ -33,33 +34,34 @@ fun TaskDetailsScreen(
         topBar = {
             TaskDetailsAppBar(
                 selectedTask = selectedTask,
-                navigateToTasksList = { action ->
-                    if (!needToValidateFields(action)) {
-                        navigateToTasksList(action)
+                onBackClick = {
+                    navigateToTasksList(ToDoTaskAction.NO_ACTION)
+                },
+                onAddClick = {
+                    val newTask = ToDoTask(
+                        id = 0,
+                        title = editedTitle,
+                        description = editedDescription,
+                        priority = editedPriority,
+                    )
+
+                    val validationResult = validateFields(newTask)
+                    if (validationResult is ValidationResult.Error) {
+                        ToastManager.showShort(context, validationResult.messageId)
                         return@TaskDetailsAppBar
                     }
 
-                    when (val validationResult = viewModel.validateFields()) {
-                        is ValidationResult.Error -> {
-                            ToastManager.showShort(context, validationResult.messageId)
-                        }
-                        is ValidationResult.Success -> {
-                            navigateToTasksList(action)
-                        }
-                    }
+                    viewModel.addTask(newTask)
+                    navigateToTasksList(ToDoTaskAction.ADD)
+                },
+                onCloseClick = {
+                    navigateToTasksList(ToDoTaskAction.NO_ACTION)
+                },
+                onUpdateClick = {
 
-                    when (action) {
-                        ToDoTaskAction.ADD -> {
-                            val newTask = ToDoTask(
-                                id = 0,
-                                title = editedTitle,
-                                description = editedDescription,
-                                priority = editedPriority,
-                            )
-                            viewModel.addTask(newTask)
-                        }
-                        else -> {}
-                    }
+                },
+                onDeleteClick = {
+
                 },
             )
         },
@@ -82,7 +84,18 @@ fun TaskDetailsScreen(
     )
 }
 
-private fun needToValidateFields(action: ToDoTaskAction): Boolean {
-    return action == ToDoTaskAction.ADD ||
-            action == ToDoTaskAction.UPDATE
+private fun validateFields(
+    task: ToDoTask,
+): ValidationResult {
+    val title = task.title
+    if (title.isBlank()) {
+        return ValidationResult.Error(R.string.title_is_empty)
+    }
+
+    val description = task.description
+    if (description.isBlank()) {
+        return ValidationResult.Error(R.string.description_is_empty)
+    }
+
+    return ValidationResult.Success
 }
