@@ -1,5 +1,6 @@
 package com.example.to_docompose.ui.screens.tasksList
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,10 +12,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -23,7 +24,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.to_docompose.R
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessage
 import com.example.to_docompose.ui.theme.LocalCustomColorsPalette
+import kotlinx.coroutines.launch
 
+private const val TAG = "TasksListScreen"
 const val TASKS_LIST_ARG_KEY = "actionId"
 
 @Composable
@@ -31,20 +34,18 @@ fun TasksListScreen(
     navigateToTaskDetails: (taskId: Int) -> Unit,
     viewModel: TasksListViewModel = hiltViewModel(),
 ) {
+    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     val context = LocalContext.current
 
     val taskMessage: TaskMessage? by viewModel.taskMessage.collectAsState()
-
-    LaunchedEffect(
-        key1 = taskMessage,
-        key2 = snackbarHostState,
-    ) {
-        taskMessage?.let { message ->
+    taskMessage?.let { message ->
+        scope.launch {
+            Log.d(TAG, "showSnackbar")
             snackbarHostState.showSnackbar(context.getString(message.messageId))
-            viewModel.onTaskMessageHandled()
         }
+        viewModel.onTaskMessageHandled()
     }
 
     Scaffold(
