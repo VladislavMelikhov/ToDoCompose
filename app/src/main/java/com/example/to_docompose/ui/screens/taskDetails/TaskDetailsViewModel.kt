@@ -4,9 +4,12 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.to_docompose.R
 import com.example.to_docompose.data.models.Priority
 import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.data.repositories.ToDoTasksRepository
+import com.example.to_docompose.ui.screens.tasksList.message.TaskMessage
+import com.example.to_docompose.ui.screens.tasksList.message.TaskMessageBus
 import com.example.to_docompose.utils.coroutines.ApplicationScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +26,7 @@ class TaskDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val applicationScope: ApplicationScope,
     private val toDoTasksRepository: ToDoTasksRepository,
+    private val taskMessageBus: TaskMessageBus,
 ) : ViewModel() {
 
     companion object {
@@ -80,7 +84,12 @@ class TaskDetailsViewModel @Inject constructor(
     fun addTask(task: ToDoTask) {
         applicationScope.launch {
             toDoTasksRepository.addTask(task)
+            taskMessageBus.sendMessage(TaskMessage(R.string.task_added))
         }
+    }
+
+    fun closeTask() {
+        taskMessageBus.sendMessage(TaskMessage(R.string.task_closed))
     }
 
     override fun onCleared() {

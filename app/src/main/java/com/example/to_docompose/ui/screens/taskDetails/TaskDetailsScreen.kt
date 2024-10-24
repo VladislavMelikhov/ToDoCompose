@@ -55,6 +55,7 @@ fun TaskDetailsScreen(
                     navigateToTasksList(ToDoTaskAction.ADD)
                 },
                 onCloseClick = {
+                    viewModel.closeTask()
                     navigateToTasksList(ToDoTaskAction.NO_ACTION)
                 },
                 onUpdateClick = {
