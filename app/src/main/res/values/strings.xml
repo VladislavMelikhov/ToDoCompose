@@ -25,4 +25,5 @@
     <string name="task_added">Task added</string>
     <string name="task_closed">Task closed</string>
     <string name="task_updated">Task updated</string>
+    <string name="task_deleted">Task deleted</string>
 </resources>

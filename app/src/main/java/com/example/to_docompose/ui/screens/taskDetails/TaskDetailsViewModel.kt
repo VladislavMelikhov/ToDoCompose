@@ -99,6 +99,13 @@ class TaskDetailsViewModel @Inject constructor(
         }
     }
 
+    fun deleteTask(taskId: Int) {
+        applicationScope.launch {
+            toDoTasksRepository.deleteTask(taskId)
+            taskMessageBus.sendMessage(TaskMessage(R.string.task_deleted))
+        }
+    }
+
     override fun onCleared() {
         Log.d(TAG, "onCleared")
 
