@@ -58,8 +58,22 @@ fun TaskDetailsScreen(
                     viewModel.closeTask()
                     navigateToTasksList(ToDoTaskAction.NO_ACTION)
                 },
-                onUpdateClick = {
+                onUpdateClick = { taskId ->
+                    val editedTask = ToDoTask(
+                        id = taskId,
+                        title = editedTitle,
+                        description = editedDescription,
+                        priority = editedPriority,
+                    )
 
+                    val validationResult = validateFields(editedTask)
+                    if (validationResult is ValidationResult.Error) {
+                        ToastManager.showShort(context, validationResult.messageId)
+                        return@TaskDetailsAppBar
+                    }
+
+                    viewModel.updateTask(editedTask)
+                    navigateToTasksList(ToDoTaskAction.UPDATE)
                 },
                 onDeleteClick = {
 

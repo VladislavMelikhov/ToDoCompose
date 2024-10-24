@@ -28,7 +28,7 @@ fun TaskDetailsAppBar(
     onAddClick: () -> Unit,
     onCloseClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onUpdateClick: () -> Unit,
+    onUpdateClick: (taskId: Int) -> Unit,
 ) {
     if (selectedTask == null) {
         NewTaskAppBar(
@@ -110,7 +110,7 @@ private fun ExistingTaskAppBar(
     task: ToDoTask,
     onCloseClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onUpdateClick: () -> Unit,
+    onUpdateClick: (taskId: Int) -> Unit,
 ) {
     TopAppBar(
         navigationIcon = {
@@ -134,7 +134,7 @@ private fun ExistingTaskAppBar(
                 onClick = { onDeleteClick() }
             )
             UpdateAction(
-                onClick = { onUpdateClick() }
+                onClick = { onUpdateClick(task.id) }
             )
         },
     )

@@ -91,6 +91,13 @@ class TaskDetailsViewModel @Inject constructor(
     fun closeTask() {
         taskMessageBus.sendMessage(TaskMessage(R.string.task_closed))
     }
+    
+    fun updateTask(task: ToDoTask) {
+        applicationScope.launch { 
+            toDoTasksRepository.updateTask(task)
+            taskMessageBus.sendMessage(TaskMessage(R.string.task_updated))
+        }
+    }
 
     override fun onCleared() {
         Log.d(TAG, "onCleared")

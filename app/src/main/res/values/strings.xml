@@ -24,4 +24,5 @@
     <string name="description_is_empty">Description is empty</string>
     <string name="task_added">Task added</string>
     <string name="task_closed">Task closed</string>
+    <string name="task_updated">Task updated</string>
 </resources>
