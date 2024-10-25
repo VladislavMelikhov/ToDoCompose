@@ -9,14 +9,17 @@ import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.data.repositories.ToDoTasksRepository
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessage
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessageBus
+import com.example.to_docompose.utils.coroutines.ApplicationScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TasksListViewModel @Inject constructor(
+    private val applicationScope: ApplicationScope,
     private val toDoTasksRepository: ToDoTasksRepository,
     private val taskMessageBus: TaskMessageBus,
 ) : ViewModel() {
@@ -45,6 +48,15 @@ class TasksListViewModel @Inject constructor(
 
     fun onTaskMessageHandled() {
         taskMessageBus.onMessageHandled()
+    }
+
+    fun restoreTask(task: ToDoTask) {
+        applicationScope.launch {
+            toDoTasksRepository.addTask(task)
+            taskMessageBus.sendMessage(
+                TaskMessage.TaskRestored(taskTitle = task.title)
+            )
+        }
     }
 
     override fun onCleared() {

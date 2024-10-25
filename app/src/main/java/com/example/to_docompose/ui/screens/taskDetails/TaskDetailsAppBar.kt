@@ -27,7 +27,7 @@ fun TaskDetailsAppBar(
     onBackClick: () -> Unit,
     onAddClick: () -> Unit,
     onCloseClick: () -> Unit,
-    onDeleteClick: (taskId: Int) -> Unit,
+    onDeleteClick: (ToDoTask) -> Unit,
     onUpdateClick: (taskId: Int) -> Unit,
 ) {
     if (selectedTask == null) {
@@ -109,7 +109,7 @@ private fun AddAction(
 private fun ExistingTaskAppBar(
     task: ToDoTask,
     onCloseClick: () -> Unit,
-    onDeleteClick: (taskId: Int) -> Unit,
+    onDeleteClick: (ToDoTask) -> Unit,
     onUpdateClick: (taskId: Int) -> Unit,
 ) {
     TopAppBar(
@@ -131,7 +131,7 @@ private fun ExistingTaskAppBar(
         ),
         actions = {
             DeleteAction(
-                onClick = { onDeleteClick(task.id) }
+                onClick = { onDeleteClick(task) }
             )
             UpdateAction(
                 onClick = { onUpdateClick(task.id) }

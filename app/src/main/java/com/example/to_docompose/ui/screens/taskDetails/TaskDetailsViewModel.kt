@@ -84,25 +84,27 @@ class TaskDetailsViewModel @Inject constructor(
     fun addTask(task: ToDoTask) {
         applicationScope.launch {
             toDoTasksRepository.addTask(task)
-            taskMessageBus.sendMessage(TaskMessage(R.string.task_added))
+            taskMessageBus.sendMessage(
+                TaskMessage.TaskAdded(taskTitle = task.title)
+            )
         }
     }
 
-    fun closeTask() {
-        taskMessageBus.sendMessage(TaskMessage(R.string.task_closed))
-    }
-    
-    fun updateTask(task: ToDoTask) {
+    fun updateTask(editedTask: ToDoTask) {
         applicationScope.launch { 
-            toDoTasksRepository.updateTask(task)
-            taskMessageBus.sendMessage(TaskMessage(R.string.task_updated))
+            toDoTasksRepository.updateTask(editedTask)
+            taskMessageBus.sendMessage(
+                TaskMessage.TaskUpdated(updatedTaskTitle = editedTask.title)
+            )
         }
     }
 
-    fun deleteTask(taskId: Int) {
+    fun deleteTask(originalTask: ToDoTask) {
         applicationScope.launch {
-            toDoTasksRepository.deleteTask(taskId)
-            taskMessageBus.sendMessage(TaskMessage(R.string.task_deleted))
+            toDoTasksRepository.deleteTask(originalTask.id)
+            taskMessageBus.sendMessage(
+                TaskMessage.TaskDeleted(originalTask = originalTask)
+            )
         }
     }
 

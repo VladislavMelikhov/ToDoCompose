@@ -55,7 +55,6 @@ fun TaskDetailsScreen(
                     navigateToTasksList(ToDoTaskAction.ADD)
                 },
                 onCloseClick = {
-                    viewModel.closeTask()
                     navigateToTasksList(ToDoTaskAction.NO_ACTION)
                 },
                 onUpdateClick = { taskId ->
@@ -75,8 +74,8 @@ fun TaskDetailsScreen(
                     viewModel.updateTask(editedTask)
                     navigateToTasksList(ToDoTaskAction.UPDATE)
                 },
-                onDeleteClick = { taskId ->
-                    viewModel.deleteTask(taskId)
+                onDeleteClick = { originalTask ->
+                    viewModel.deleteTask(originalTask)
                     navigateToTasksList(ToDoTaskAction.DELETE)
                 },
             )

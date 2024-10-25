@@ -9,8 +9,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -23,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.to_docompose.R
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessage
+import com.example.to_docompose.ui.screens.tasksList.message.toDisplayString
 import com.example.to_docompose.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.launch
 
@@ -42,8 +45,26 @@ fun TasksListScreen(
     val taskMessage: TaskMessage? by viewModel.taskMessage.collectAsState()
     taskMessage?.let { message ->
         scope.launch {
-            Log.d(TAG, "showSnackbar")
-            snackbarHostState.showSnackbar(context.getString(message.messageId))
+            Log.d(TAG, "showSnackbar, message: $message")
+            when (message) {
+                is TaskMessage.TaskAdded,
+                is TaskMessage.TaskUpdated,
+                is TaskMessage.TaskRestored -> {
+                    snackbarHostState.showSnackbar(
+                        message = message.toDisplayString(context),
+                    )
+                }
+                is TaskMessage.TaskDeleted -> {
+                    val result = snackbarHostState.showSnackbar(
+                        message = message.toDisplayString(context),
+                        actionLabel = context.getString(R.string.undo),
+                        duration = SnackbarDuration.Long,
+                    )
+                    if (result == SnackbarResult.ActionPerformed) {
+                        viewModel.restoreTask(message.originalTask)
+                    }
+                }
+            }
         }
         viewModel.onTaskMessageHandled()
     }

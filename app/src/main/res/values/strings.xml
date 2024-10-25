@@ -22,8 +22,9 @@
     <string name="description">Description</string>
     <string name="title_is_empty">Title is empty</string>
     <string name="description_is_empty">Description is empty</string>
-    <string name="task_added">Task added</string>
-    <string name="task_closed">Task closed</string>
-    <string name="task_updated">Task updated</string>
-    <string name="task_deleted">Task deleted</string>
+    <string name="task_added">Task added: %1$s</string>
+    <string name="task_updated">Task updated: %1$s</string>
+    <string name="task_deleted">Task deleted: %1$s</string>
+    <string name="task_restored">Task restored: %1$s</string>
+    <string name="undo">Undo</string>
 </resources>
