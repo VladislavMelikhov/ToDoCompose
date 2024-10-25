@@ -9,13 +9,16 @@ import com.example.to_docompose.ui.screens.tasksList.message.TaskMessage
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessageBus
 import com.example.to_docompose.utils.coroutines.ApplicationScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class TasksListViewModel @Inject constructor(
     private val applicationScope: ApplicationScope,
@@ -38,8 +41,8 @@ class TasksListViewModel @Inject constructor(
     val searchQuery: MutableStateFlow<String> = _searchQuery
 
     val allTasks: StateFlow<List<ToDoTask>> =
-        toDoTasksRepository
-            .getAllTasks()
+        searchQuery
+            .flatMapLatest(toDoTasksRepository::searchTasks)
             .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     val taskMessage: StateFlow<TaskMessage?> =

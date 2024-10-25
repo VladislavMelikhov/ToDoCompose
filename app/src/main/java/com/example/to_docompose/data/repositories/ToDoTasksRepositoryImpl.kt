@@ -42,7 +42,7 @@ class ToDoTasksRepositoryImpl @Inject constructor(
     }
 
     override fun searchTasks(searchQuery: String): Flow<List<ToDoTask>> =
-        toDoTasksDao.searchTasks(searchQuery)
+        toDoTasksDao.searchTasks("%$searchQuery%")
             .map(List<ToDoTaskEntity>::toDomain)
 
     override fun getAllTasksSortedByPriorityAsc(): Flow<List<ToDoTask>> =
