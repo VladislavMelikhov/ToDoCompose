@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.to_docompose.R
 import com.example.to_docompose.data.models.Priority
 import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.data.repositories.ToDoTasksRepository
@@ -40,7 +39,7 @@ class TaskDetailsViewModel @Inject constructor(
     }
 
     private val _selectedTaskId: Int =
-        requireNotNull(savedStateHandle["taskId"])
+        requireNotNull(savedStateHandle[TASK_DETAILS_ARG_KEY])
 
     val selectedTask: StateFlow<ToDoTask?> =
         flow {

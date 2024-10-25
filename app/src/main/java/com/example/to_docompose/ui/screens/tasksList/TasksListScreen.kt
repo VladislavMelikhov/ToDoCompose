@@ -31,7 +31,6 @@ import com.example.to_docompose.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.launch
 
 private const val TAG = "TasksListScreen"
-const val TASKS_LIST_ARG_KEY = "actionId"
 
 @Composable
 fun TasksListScreen(

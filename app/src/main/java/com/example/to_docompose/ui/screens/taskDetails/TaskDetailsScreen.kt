@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.to_docompose.R
 import com.example.to_docompose.data.models.ToDoTask
-import com.example.to_docompose.navigation.ToDoTaskAction
 import com.example.to_docompose.utils.ToastManager
 
 const val TASK_DETAILS_ARG_KEY = "taskId"
@@ -20,7 +19,7 @@ const val TASK_DETAILS_ARG_KEY = "taskId"
 @Composable
 fun TaskDetailsScreen(
     viewModel: TaskDetailsViewModel = hiltViewModel(),
-    navigateToTasksList: (ToDoTaskAction) -> Unit,
+    navigateToTasksList: () -> Unit,
 ) {
     val selectedTask by viewModel.selectedTask.collectAsState()
 
@@ -35,7 +34,7 @@ fun TaskDetailsScreen(
             TaskDetailsAppBar(
                 selectedTask = selectedTask,
                 onBackClick = {
-                    navigateToTasksList(ToDoTaskAction.NO_ACTION)
+                    navigateToTasksList()
                 },
                 onAddClick = {
                     val newTask = ToDoTask(
@@ -52,10 +51,10 @@ fun TaskDetailsScreen(
                     }
 
                     viewModel.addTask(newTask)
-                    navigateToTasksList(ToDoTaskAction.ADD)
+                    navigateToTasksList()
                 },
                 onCloseClick = {
-                    navigateToTasksList(ToDoTaskAction.NO_ACTION)
+                    navigateToTasksList()
                 },
                 onUpdateClick = { taskId ->
                     val editedTask = ToDoTask(
@@ -72,11 +71,11 @@ fun TaskDetailsScreen(
                     }
 
                     viewModel.updateTask(editedTask)
-                    navigateToTasksList(ToDoTaskAction.UPDATE)
+                    navigateToTasksList()
                 },
                 onDeleteClick = { originalTask ->
                     viewModel.deleteTask(originalTask)
-                    navigateToTasksList(ToDoTaskAction.DELETE)
+                    navigateToTasksList()
                 },
             )
         },
