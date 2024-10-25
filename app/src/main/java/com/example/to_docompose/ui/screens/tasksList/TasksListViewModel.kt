@@ -40,7 +40,7 @@ class TasksListViewModel @Inject constructor(
     private val _searchQuery: MutableStateFlow<String> = MutableStateFlow("")
     val searchQuery: MutableStateFlow<String> = _searchQuery
 
-    val allTasks: StateFlow<List<ToDoTask>> =
+    val tasks: StateFlow<List<ToDoTask>> =
         searchQuery
             .flatMapLatest(toDoTasksRepository::searchTasks)
             .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())

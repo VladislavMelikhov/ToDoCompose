@@ -13,8 +13,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -33,17 +31,15 @@ import com.example.to_docompose.ui.theme.ToDoComposeTheme
 
 @Composable
 fun TasksListContent(
-    viewModel: TasksListViewModel,
-    navigateToTaskDetails: (taskId: Int) -> Unit,
+    tasks: List<ToDoTask>,
+    onTaskClick: (taskId: Int) -> Unit,
 ) {
-    val tasks: List<ToDoTask> by viewModel.allTasks.collectAsState()
-
     if (tasks.isEmpty()) {
         TasksEmptyContent()
     } else {
         TasksList(
             tasks = tasks,
-            navigateToTaskDetails = navigateToTaskDetails,
+            onTaskClick = onTaskClick,
         )
     }
 }
@@ -51,7 +47,7 @@ fun TasksListContent(
 @Composable
 private fun TasksList(
     tasks: List<ToDoTask>,
-    navigateToTaskDetails: (taskId: Int) -> Unit,
+    onTaskClick: (taskId: Int) -> Unit,
 ) {
     LazyColumn {
         items(
@@ -62,7 +58,7 @@ private fun TasksList(
             itemContent = { index ->
                 TasksListItem(
                     toDoTask = tasks[index],
-                    navigateToTaskDetails = navigateToTaskDetails
+                    onTaskClick = onTaskClick,
                 )
             }
         )
@@ -72,7 +68,7 @@ private fun TasksList(
 @Composable
 private fun TasksListItem(
     toDoTask: ToDoTask,
-    navigateToTaskDetails: (taskId: Int) -> Unit,
+    onTaskClick: (taskId: Int) -> Unit,
 ) {
     Surface(
         modifier = Modifier
@@ -81,7 +77,7 @@ private fun TasksListItem(
         shape = RectangleShape,
         shadowElevation = TASK_ITEM_ELEVATION,
         onClick = {
-            navigateToTaskDetails(toDoTask.id)
+            onTaskClick(toDoTask.id)
         },
     ) {
         Column(
@@ -142,7 +138,7 @@ private fun TasksListItemPreview() {
                 description = "Some description of what needs to be done in this particular task. May be very long text long text long text",
                 priority = Priority.MEDIUM,
             ),
-            navigateToTaskDetails = {},
+            onTaskClick = {},
         )
     }
 }

@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.to_docompose.R
+import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessage
 import com.example.to_docompose.ui.screens.tasksList.message.toDisplayString
 import com.example.to_docompose.ui.theme.LocalCustomColorsPalette
@@ -71,6 +72,7 @@ fun TasksListScreen(
 
     val searchAppBarState: SearchAppBarState by viewModel.searchAppBarState.collectAsState()
     val searchQuery: String by viewModel.searchQuery.collectAsState()
+    val tasks: List<ToDoTask> by viewModel.tasks.collectAsState()
 
     Scaffold(
         snackbarHost = {
@@ -94,8 +96,8 @@ fun TasksListScreen(
                     .padding(padding),
             ) {
                 TasksListContent(
-                    viewModel = viewModel,
-                    navigateToTaskDetails = navigateToTaskDetails,
+                    tasks = tasks,
+                    onTaskClick = navigateToTaskDetails,
                 )
             }
         },
