@@ -1,8 +1,6 @@
 package com.example.to_docompose.ui.screens.tasksList
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.to_docompose.data.models.ToDoTask
@@ -11,6 +9,7 @@ import com.example.to_docompose.ui.screens.tasksList.message.TaskMessage
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessageBus
 import com.example.to_docompose.utils.coroutines.ApplicationScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -32,11 +31,11 @@ class TasksListViewModel @Inject constructor(
         Log.d(TAG, "init")
     }
 
-    val searchAppBarState: MutableState<SearchAppBarState> =
-        mutableStateOf(SearchAppBarState.CLOSED)
+    val searchAppBarState: MutableStateFlow<SearchAppBarState> =
+        MutableStateFlow(SearchAppBarState.CLOSED)
 
-    val searchTextState: MutableState<String> =
-        mutableStateOf("")
+    val searchTextState: MutableStateFlow<String> =
+        MutableStateFlow("")
 
     val allTasks: StateFlow<List<ToDoTask>> =
         toDoTasksRepository

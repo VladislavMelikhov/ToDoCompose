@@ -21,6 +21,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,8 +47,8 @@ import com.example.to_docompose.ui.theme.Typography
 fun TasksAppBar(
     viewModel: TasksListViewModel,
 ) {
-    val searchAppBarState: SearchAppBarState by viewModel.searchAppBarState
-    val searchTextState: String by viewModel.searchTextState
+    val searchAppBarState: SearchAppBarState by viewModel.searchAppBarState.collectAsState()
+    val searchTextState: String by viewModel.searchTextState.collectAsState()
 
     when (searchAppBarState) {
         SearchAppBarState.CLOSED -> DefaultTasksAppBar(
