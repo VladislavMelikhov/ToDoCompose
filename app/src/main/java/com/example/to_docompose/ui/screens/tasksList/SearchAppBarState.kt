@@ -4,5 +4,4 @@ enum class SearchAppBarState {
 
     OPENED,
     CLOSED,
-    TRIGGERED
 }

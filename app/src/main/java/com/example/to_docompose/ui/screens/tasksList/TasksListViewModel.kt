@@ -31,11 +31,11 @@ class TasksListViewModel @Inject constructor(
         Log.d(TAG, "init")
     }
 
-    val searchAppBarState: MutableStateFlow<SearchAppBarState> =
-        MutableStateFlow(SearchAppBarState.CLOSED)
+    private val _searchAppBarState: MutableStateFlow<SearchAppBarState> = MutableStateFlow(SearchAppBarState.CLOSED)
+    val searchAppBarState: StateFlow<SearchAppBarState> = _searchAppBarState
 
-    val searchTextState: MutableStateFlow<String> =
-        MutableStateFlow("")
+    private val _searchQuery: MutableStateFlow<String> = MutableStateFlow("")
+    val searchQuery: MutableStateFlow<String> = _searchQuery
 
     val allTasks: StateFlow<List<ToDoTask>> =
         toDoTasksRepository
@@ -56,6 +56,22 @@ class TasksListViewModel @Inject constructor(
                 TaskMessage.TaskRestored(taskTitle = task.title)
             )
         }
+    }
+
+    fun onOpenSearchClick() {
+        _searchAppBarState.value = SearchAppBarState.OPENED
+    }
+
+    fun onCloseSearchClick() {
+        if (_searchQuery.value.isNotEmpty()) {
+            _searchQuery.value = ""
+        } else {
+            _searchAppBarState.value = SearchAppBarState.CLOSED
+        }
+    }
+
+    fun searchTasks(searchQuery: String) {
+        _searchQuery.value = searchQuery
     }
 
     override fun onCleared() {

@@ -69,6 +69,9 @@ fun TasksListScreen(
         viewModel.onTaskMessageHandled()
     }
 
+    val searchAppBarState: SearchAppBarState by viewModel.searchAppBarState.collectAsState()
+    val searchQuery: String by viewModel.searchQuery.collectAsState()
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(
@@ -77,7 +80,11 @@ fun TasksListScreen(
         },
         topBar = {
             TasksAppBar(
-                viewModel = viewModel,
+                searchAppBarState = searchAppBarState,
+                searchQuery = searchQuery,
+                onOpenSearchClick = viewModel::onOpenSearchClick,
+                onCloseSearchClick = viewModel::onCloseSearchClick,
+                onSearchQueryChange = viewModel::searchTasks
             )
         },
         content = { padding ->
