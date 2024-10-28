@@ -68,6 +68,11 @@ class TaskDetailsViewModel @Inject constructor(
     private val _editedPriority: MutableStateFlow<Priority> = MutableStateFlow(Priority.MEDIUM)
     val editedPriority: StateFlow<Priority> = _editedPriority
 
+    private val _deleteConfirmationDialogState: MutableStateFlow<TaskConfirmationDialogState> =
+        MutableStateFlow(TaskConfirmationDialogState.Hidden)
+    val deleteConfirmationDialogState: StateFlow<TaskConfirmationDialogState> =
+        _deleteConfirmationDialogState
+
     fun setEditedTitle(title: String) {
         _editedTitle.value = title.take(TITLE_MAX_LENGTH)
     }
@@ -107,9 +112,26 @@ class TaskDetailsViewModel @Inject constructor(
         }
     }
 
+    fun showDeleteConfirmationDialog(originalTask: ToDoTask) {
+        _deleteConfirmationDialogState.value = TaskConfirmationDialogState.Shown(originalTask)
+    }
+
+    fun hideDeleteConfirmationDialog() {
+        _deleteConfirmationDialogState.value = TaskConfirmationDialogState.Hidden
+    }
+
     override fun onCleared() {
         Log.d(TAG, "onCleared")
 
         super.onCleared()
     }
+}
+
+sealed interface TaskConfirmationDialogState {
+
+    data class Shown(
+        val task: ToDoTask,
+    ) : TaskConfirmationDialogState
+
+    data object Hidden : TaskConfirmationDialogState
 }

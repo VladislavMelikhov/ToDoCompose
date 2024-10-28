@@ -9,9 +9,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.to_docompose.R
 import com.example.to_docompose.data.models.ToDoTask
+import com.example.to_docompose.ui.components.ConfirmationDialog
 import com.example.to_docompose.utils.ToastManager
 
 const val TASK_DETAILS_ARG_KEY = "taskId"
@@ -26,6 +28,8 @@ fun TaskDetailsScreen(
     val editedTitle by viewModel.editedTitle.collectAsState()
     val editedDescription by viewModel.editedDescription.collectAsState()
     val editedPriority by viewModel.editedPriority.collectAsState()
+
+    val deleteConfirmationDialogState by viewModel.deleteConfirmationDialogState.collectAsState()
 
     val context = LocalContext.current
 
@@ -76,8 +80,7 @@ fun TaskDetailsScreen(
                     navigateToTasksList()
                 },
                 onDeleteClick = { originalTask ->
-                    viewModel.deleteTask(originalTask)
-                    navigateToTasksList()
+                    viewModel.showDeleteConfirmationDialog(originalTask)
                 },
             )
         },
@@ -98,6 +101,24 @@ fun TaskDetailsScreen(
             }
         },
     )
+
+    when (val state = deleteConfirmationDialogState) {
+        is TaskConfirmationDialogState.Shown -> {
+            val originalTask = state.task
+            ConfirmationDialog(
+                title = stringResource(R.string.confirm_delete_title),
+                message = stringResource(R.string.confirm_delete_message),
+                onYesClick = {
+                    viewModel.deleteTask(originalTask)
+                    navigateToTasksList()
+                },
+                closeDialog = {
+                    viewModel.hideDeleteConfirmationDialog()
+                },
+            )
+        }
+        is TaskConfirmationDialogState.Hidden -> {}
+    }
 }
 
 private fun validateFields(

@@ -29,4 +29,8 @@
     <string name="undo">Undo</string>
     <string name="tasks_deleted">Tasks deleted: %1$d items</string>
     <string name="tasks_restored">Tasks restored: %1$d items</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="confirm_delete_title">Confirm Delete</string>
+    <string name="confirm_delete_message">Are you sure you want to delete this task?</string>
 </resources>
