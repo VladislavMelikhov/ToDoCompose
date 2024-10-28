@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.to_docompose.R
 import com.example.to_docompose.data.models.Priority
+import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.ui.theme.ComposeLocalWrapper
 import com.example.to_docompose.ui.theme.ContentAlpha
 import com.example.to_docompose.ui.theme.LARGE_PADDING
@@ -44,17 +45,20 @@ import com.example.to_docompose.ui.theme.Typography
 
 @Composable
 fun TasksAppBar(
+    tasks: List<ToDoTask>,
     searchAppBarState: SearchAppBarState,
     searchQuery: String,
     onOpenSearchClick: () -> Unit,
     onCloseSearchClick: () -> Unit,
     onSearchQueryChange: (String) -> Unit,
+    onDeleteAllClick: (List<ToDoTask>) -> Unit,
 ) {
     when (searchAppBarState) {
         SearchAppBarState.CLOSED -> DefaultTasksAppBar(
+            tasks = tasks,
             onSearchClick = onOpenSearchClick,
             onSortClick = {},
-            onDeleteAllClick = {},
+            onDeleteAllClick = onDeleteAllClick,
         )
         SearchAppBarState.OPENED -> SearchTasksAppBar(
             text = searchQuery,
@@ -68,9 +72,10 @@ fun TasksAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DefaultTasksAppBar(
+    tasks: List<ToDoTask>,
     onSearchClick: () -> Unit,
     onSortClick: (Priority) -> Unit,
-    onDeleteAllClick: () -> Unit,
+    onDeleteAllClick: (List<ToDoTask>) -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -81,6 +86,7 @@ private fun DefaultTasksAppBar(
         },
         actions = {
             TasksAppBarActions(
+                tasks = tasks,
                 onSearchClick = onSearchClick,
                 onSortClick = onSortClick,
                 onDeleteAllClick = onDeleteAllClick,
@@ -94,9 +100,10 @@ private fun DefaultTasksAppBar(
 
 @Composable
 private fun TasksAppBarActions(
+    tasks: List<ToDoTask>,
     onSearchClick: () -> Unit,
     onSortClick: (Priority) -> Unit,
-    onDeleteAllClick: () -> Unit,
+    onDeleteAllClick: (List<ToDoTask>) -> Unit,
 ) {
     SearchAction(
         onSearchClick = onSearchClick,
@@ -104,9 +111,12 @@ private fun TasksAppBarActions(
     SortAction(
         onSortClick = onSortClick,
     )
-    DeleteAllAction(
-        onDeleteAllClick = onDeleteAllClick,
-    )
+    if (tasks.isNotEmpty()) {
+        DeleteAllAction(
+            tasks = tasks,
+            onDeleteAllClick = onDeleteAllClick,
+        )
+    }
 }
 
 @Composable
@@ -175,7 +185,8 @@ private fun SortAction(
 
 @Composable
 private fun DeleteAllAction(
-    onDeleteAllClick: () -> Unit,
+    tasks: List<ToDoTask>,
+    onDeleteAllClick: (List<ToDoTask>) -> Unit,
 ) {
     var expanded: Boolean by remember { mutableStateOf(false) }
 
@@ -203,7 +214,7 @@ private fun DeleteAllAction(
                 },
                 onClick = {
                     expanded = false
-                    onDeleteAllClick()
+                    onDeleteAllClick(tasks)
                 },
             )
         }
@@ -293,6 +304,7 @@ private fun SearchTasksAppBar(
 private fun DefaultTasksAppBarPreview() {
     ComposeLocalWrapper {
         DefaultTasksAppBar(
+            tasks = emptyList(),
             onSearchClick = {},
             onSortClick = {},
             onDeleteAllClick = {},

@@ -49,19 +49,19 @@ fun TasksListScreen(
             when (message) {
                 is TaskMessage.TaskAdded,
                 is TaskMessage.TaskUpdated,
-                is TaskMessage.TaskRestored -> {
+                is TaskMessage.TasksRestored -> {
                     snackbarHostState.showSnackbar(
                         message = message.toDisplayString(context),
                     )
                 }
-                is TaskMessage.TaskDeleted -> {
+                is TaskMessage.TasksDeleted -> {
                     val result = snackbarHostState.showSnackbar(
                         message = message.toDisplayString(context),
                         actionLabel = context.getString(R.string.undo),
                         duration = SnackbarDuration.Long,
                     )
                     if (result == SnackbarResult.ActionPerformed) {
-                        viewModel.restoreTask(message.originalTask)
+                        viewModel.restoreTasks(message.tasks)
                     }
                 }
             }
@@ -81,11 +81,13 @@ fun TasksListScreen(
         },
         topBar = {
             TasksAppBar(
+                tasks = tasks,
                 searchAppBarState = searchAppBarState,
                 searchQuery = searchQuery,
                 onOpenSearchClick = viewModel::onOpenSearchClick,
                 onCloseSearchClick = viewModel::onCloseSearchClick,
-                onSearchQueryChange = viewModel::searchTasks
+                onSearchQueryChange = viewModel::searchTasks,
+                onDeleteAllClick = viewModel::deleteTasks
             )
         },
         content = { padding ->

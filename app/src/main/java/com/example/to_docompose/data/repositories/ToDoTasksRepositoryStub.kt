@@ -33,6 +33,10 @@ class ToDoTasksRepositoryStub @Inject constructor() : ToDoTasksRepository {
         TODO("Not yet implemented")
     }
 
+    override suspend fun addTasks(tasks: List<ToDoTask>) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun updateTask(task: ToDoTask) {
         TODO("Not yet implemented")
     }
@@ -41,7 +45,7 @@ class ToDoTasksRepositoryStub @Inject constructor() : ToDoTasksRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteAllTasks() {
+    override suspend fun deleteTasks(tasksIds: List<Int>) {
         TODO("Not yet implemented")
     }
 

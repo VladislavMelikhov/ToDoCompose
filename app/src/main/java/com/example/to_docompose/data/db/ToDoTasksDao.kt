@@ -20,14 +20,17 @@ interface ToDoTasksDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTask(task: ToDoTaskEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addTasks(tasks: List<ToDoTaskEntity>)
+
     @Update
     suspend fun updateTask(task: ToDoTaskEntity)
 
     @Query("DELETE FROM todo_tasks_table WHERE id=:taskId")
     suspend fun deleteTask(taskId: Int)
 
-    @Query("DELETE FROM todo_tasks_table")
-    suspend fun deleteAllTasks()
+    @Query("DELETE FROM todo_tasks_table WHERE id IN (:tasksIds)")
+    suspend fun deleteTasks(tasksIds: List<Int>)
 
     @Query("""
         SELECT * FROM todo_tasks_table WHERE

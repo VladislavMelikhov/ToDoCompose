@@ -102,7 +102,7 @@ class TaskDetailsViewModel @Inject constructor(
         applicationScope.launch {
             toDoTasksRepository.deleteTask(originalTask.id)
             taskMessageBus.sendMessage(
-                TaskMessage.TaskDeleted(originalTask = originalTask)
+                TaskMessage.TasksDeleted(tasks = listOf(originalTask))
             )
         }
     }

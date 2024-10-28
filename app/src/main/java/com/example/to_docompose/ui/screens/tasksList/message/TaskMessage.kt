@@ -14,12 +14,12 @@ sealed interface TaskMessage {
         val updatedTaskTitle: String,
     ) : TaskMessage
 
-    data class TaskDeleted(
-        val originalTask: ToDoTask,
+    data class TasksDeleted(
+        val tasks: List<ToDoTask>,
     ) : TaskMessage
 
-    data class TaskRestored(
-        val taskTitle: String,
+    data class TasksRestored(
+        val tasks: List<ToDoTask>,
     ) : TaskMessage
 }
 
@@ -27,6 +27,18 @@ fun TaskMessage.toDisplayString(context: Context): String =
     when (this) {
         is TaskMessage.TaskAdded -> context.getString(R.string.task_added, taskTitle)
         is TaskMessage.TaskUpdated -> context.getString(R.string.task_updated, updatedTaskTitle)
-        is TaskMessage.TaskDeleted -> context.getString(R.string.task_deleted, originalTask.title)
-        is TaskMessage.TaskRestored -> context.getString(R.string.task_restored, taskTitle)
+        is TaskMessage.TasksDeleted -> {
+            if (tasks.size == 1) {
+                context.getString(R.string.task_deleted, tasks.single().title)
+            } else {
+                context.getString(R.string.tasks_deleted, tasks.size)
+            }
+        }
+        is TaskMessage.TasksRestored -> {
+            if (tasks.size == 1) {
+                context.getString(R.string.task_restored, tasks.single().title)
+            } else {
+                context.getString(R.string.tasks_restored, tasks.size)
+            }
+        }
     }

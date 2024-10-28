@@ -28,6 +28,11 @@ class ToDoTasksRepositoryImpl @Inject constructor(
         toDoTasksDao.addTask(taskEntity)
     }
 
+    override suspend fun addTasks(tasks: List<ToDoTask>) {
+        val taskEntities = tasks.map(ToDoTask::toEntity)
+        toDoTasksDao.addTasks(taskEntities)
+    }
+
     override suspend fun updateTask(task: ToDoTask) {
         val taskEntity = task.toEntity()
         toDoTasksDao.updateTask(taskEntity)
@@ -37,8 +42,8 @@ class ToDoTasksRepositoryImpl @Inject constructor(
         toDoTasksDao.deleteTask(taskId)
     }
 
-    override suspend fun deleteAllTasks() {
-        toDoTasksDao.deleteAllTasks()
+    override suspend fun deleteTasks(tasksIds: List<Int>) {
+        toDoTasksDao.deleteTasks(tasksIds)
     }
 
     override fun searchTasks(searchQuery: String): Flow<List<ToDoTask>> =

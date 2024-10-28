@@ -52,11 +52,21 @@ class TasksListViewModel @Inject constructor(
         taskMessageBus.onMessageHandled()
     }
 
-    fun restoreTask(task: ToDoTask) {
+    fun deleteTasks(tasks: List<ToDoTask>) {
         applicationScope.launch {
-            toDoTasksRepository.addTask(task)
+            val tasksIds = tasks.map(ToDoTask::id)
+            toDoTasksRepository.deleteTasks(tasksIds)
             taskMessageBus.sendMessage(
-                TaskMessage.TaskRestored(taskTitle = task.title)
+                TaskMessage.TasksDeleted(tasks)
+            )
+        }
+    }
+
+    fun restoreTasks(tasks: List<ToDoTask>) {
+        applicationScope.launch {
+            toDoTasksRepository.addTasks(tasks)
+            taskMessageBus.sendMessage(
+                TaskMessage.TasksRestored(tasks)
             )
         }
     }

@@ -11,11 +11,13 @@ interface ToDoTasksRepository {
 
     suspend fun addTask(task: ToDoTask)
 
+    suspend fun addTasks(tasks: List<ToDoTask>)
+
     suspend fun updateTask(task: ToDoTask)
 
     suspend fun deleteTask(taskId: Int)
 
-    suspend fun deleteAllTasks()
+    suspend fun deleteTasks(tasksIds: List<Int>)
 
     fun searchTasks(searchQuery: String): Flow<List<ToDoTask>>
 
