@@ -70,7 +70,9 @@ fun TaskDetailsScreen(
                         return@TaskDetailsAppBar
                     }
 
-                    viewModel.updateTask(editedTask)
+                    if (editedTask != selectedTask) {
+                        viewModel.updateTask(editedTask)
+                    }
                     navigateToTasksList()
                 },
                 onDeleteClick = { originalTask ->
