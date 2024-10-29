@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.to_docompose.R
 import com.example.to_docompose.data.models.ToDoTask
+import com.example.to_docompose.ui.components.ConfirmationDialog
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessage
 import com.example.to_docompose.ui.screens.tasksList.message.toDisplayString
 import com.example.to_docompose.ui.theme.LocalCustomColorsPalette
@@ -73,6 +74,8 @@ fun TasksListScreen(
     val searchQuery: String by viewModel.searchQuery.collectAsState()
     val tasks: List<ToDoTask> by viewModel.tasks.collectAsState()
 
+    val deleteAllConfirmationDialogState by viewModel.deleteAllConfirmationDialogState.collectAsState()
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(
@@ -87,7 +90,7 @@ fun TasksListScreen(
                 onOpenSearchClick = viewModel::onOpenSearchClick,
                 onCloseSearchClick = viewModel::onCloseSearchClick,
                 onSearchQueryChange = viewModel::searchTasks,
-                onDeleteAllClick = viewModel::deleteTasks
+                onDeleteAllClick = viewModel::showDeleteAllConfirmationDialog,
             )
         },
         content = { padding ->
@@ -108,6 +111,22 @@ fun TasksListScreen(
             )
         },
     )
+    when (val state = deleteAllConfirmationDialogState) {
+        is TasksConfirmationDialogState.Shown -> {
+            val tasksToDelete = state.tasks
+            ConfirmationDialog(
+                title = stringResource(R.string.confirm_delete_all_title),
+                message = stringResource(R.string.confirm_delete_all_message),
+                onYesClick = {
+                    viewModel.deleteTasks(tasksToDelete)
+                },
+                closeDialog = {
+                    viewModel.hideDeleteAllConfirmationDialog()
+                },
+            )
+        }
+        is TasksConfirmationDialogState.Hidden -> {}
+    }
 }
 
 @Composable

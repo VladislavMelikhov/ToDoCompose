@@ -40,6 +40,11 @@ class TasksListViewModel @Inject constructor(
     private val _searchQuery: MutableStateFlow<String> = MutableStateFlow("")
     val searchQuery: MutableStateFlow<String> = _searchQuery
 
+    private val _deleteAllConfirmationDialogState: MutableStateFlow<TasksConfirmationDialogState> =
+        MutableStateFlow(TasksConfirmationDialogState.Hidden)
+    val deleteAllConfirmationDialogState: StateFlow<TasksConfirmationDialogState> =
+        _deleteAllConfirmationDialogState
+
     val tasks: StateFlow<List<ToDoTask>> =
         searchQuery
             .flatMapLatest(toDoTasksRepository::searchTasks)
@@ -87,9 +92,26 @@ class TasksListViewModel @Inject constructor(
         _searchQuery.value = searchQuery
     }
 
+    fun showDeleteAllConfirmationDialog(tasks: List<ToDoTask>) {
+        _deleteAllConfirmationDialogState.value = TasksConfirmationDialogState.Shown(tasks)
+    }
+
+    fun hideDeleteAllConfirmationDialog() {
+        _deleteAllConfirmationDialogState.value = TasksConfirmationDialogState.Hidden
+    }
+
     override fun onCleared() {
         Log.d(TAG, "onCleared")
 
         super.onCleared()
     }
+}
+
+sealed interface TasksConfirmationDialogState {
+
+    data class Shown(
+        val tasks: List<ToDoTask>,
+    ) : TasksConfirmationDialogState
+
+    data object Hidden : TasksConfirmationDialogState
 }
