@@ -117,10 +117,10 @@ fun TasksListScreen(
             ConfirmationDialog(
                 title = stringResource(R.string.confirm_delete_all_title),
                 message = stringResource(R.string.confirm_delete_all_message),
-                onYesClick = {
+                onActionConfirmed = {
                     viewModel.deleteTasks(tasksToDelete)
                 },
-                closeDialog = {
+                onCloseRequest = {
                     viewModel.hideDeleteAllConfirmationDialog()
                 },
             )

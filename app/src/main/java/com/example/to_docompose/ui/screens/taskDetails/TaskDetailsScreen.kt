@@ -108,11 +108,11 @@ fun TaskDetailsScreen(
             ConfirmationDialog(
                 title = stringResource(R.string.confirm_delete_title),
                 message = stringResource(R.string.confirm_delete_message),
-                onYesClick = {
+                onActionConfirmed = {
                     viewModel.deleteTask(originalTask)
                     navigateToTasksList()
                 },
-                closeDialog = {
+                onCloseRequest = {
                     viewModel.hideDeleteConfirmationDialog()
                 },
             )

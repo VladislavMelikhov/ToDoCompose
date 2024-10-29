@@ -15,8 +15,8 @@ import com.example.to_docompose.R
 fun ConfirmationDialog(
     title: String,
     message: String,
-    onYesClick: () -> Unit,
-    closeDialog: () -> Unit,
+    onActionConfirmed: () -> Unit,
+    onCloseRequest: () -> Unit,
 ) {
     AlertDialog(
         title = {
@@ -36,8 +36,8 @@ fun ConfirmationDialog(
         confirmButton = {
             Button(
                 onClick = {
-                    closeDialog()
-                    onYesClick()
+                    onCloseRequest()
+                    onActionConfirmed()
                 }
             ) {
                 Text(text = stringResource(R.string.yes))
@@ -46,14 +46,14 @@ fun ConfirmationDialog(
         dismissButton = {
             OutlinedButton(
                 onClick = {
-                    closeDialog()
+                    onCloseRequest()
                 }
             ) {
                 Text(text = stringResource(R.string.no))
             }
         },
         onDismissRequest = {
-            closeDialog()
+            onCloseRequest()
         },
     )
 }
@@ -64,7 +64,7 @@ private fun ConfirmationDialogPreview() {
     ConfirmationDialog(
         title = "Delete Task Confirmation Dialog",
         message = "Are you sure you want to delete this task?",
-        onYesClick = {},
-        closeDialog = {},
+        onActionConfirmed = {},
+        onCloseRequest = {},
     )
 }
