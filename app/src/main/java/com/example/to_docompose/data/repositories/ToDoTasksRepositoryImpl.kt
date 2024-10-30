@@ -15,10 +15,6 @@ class ToDoTasksRepositoryImpl @Inject constructor(
     private val toDoTasksDao: ToDoTasksDao,
 ) : ToDoTasksRepository {
 
-    override fun getAllTasks(): Flow<List<ToDoTask>> =
-        toDoTasksDao.getAllTasks()
-            .map(List<ToDoTaskEntity>::toDomain)
-
     override suspend fun getTask(taskId: Int): ToDoTask =
         toDoTasksDao.getTask(taskId)
             .let(ToDoTaskEntity::toDomain)
@@ -48,13 +44,5 @@ class ToDoTasksRepositoryImpl @Inject constructor(
 
     override fun searchTasks(searchQuery: String): Flow<List<ToDoTask>> =
         toDoTasksDao.searchTasks("%$searchQuery%")
-            .map(List<ToDoTaskEntity>::toDomain)
-
-    override fun getAllTasksSortedByPriorityAsc(): Flow<List<ToDoTask>> =
-        toDoTasksDao.getAllTasksSortedByPriorityAsc()
-            .map(List<ToDoTaskEntity>::toDomain)
-
-    override fun getAllTasksSortedByPriorityDesc(): Flow<List<ToDoTask>> =
-        toDoTasksDao.getAllTasksSortedByPriorityDesc()
             .map(List<ToDoTaskEntity>::toDomain)
 }

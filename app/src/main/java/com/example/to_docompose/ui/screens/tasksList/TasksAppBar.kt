@@ -34,7 +34,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.to_docompose.R
-import com.example.to_docompose.data.models.Priority
+import com.example.to_docompose.data.models.TasksSortPolicy
 import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.ui.theme.ComposeLocalWrapper
 import com.example.to_docompose.ui.theme.ContentAlpha
@@ -57,7 +57,7 @@ fun TasksAppBar(
         SearchAppBarState.CLOSED -> DefaultTasksAppBar(
             tasks = tasks,
             onSearchClick = onOpenSearchClick,
-            onSortClick = {},
+            onSortPolicySelected = {},
             onDeleteAllClick = onDeleteAllClick,
         )
         SearchAppBarState.OPENED -> SearchTasksAppBar(
@@ -74,7 +74,7 @@ fun TasksAppBar(
 private fun DefaultTasksAppBar(
     tasks: List<ToDoTask>,
     onSearchClick: () -> Unit,
-    onSortClick: (Priority) -> Unit,
+    onSortPolicySelected: (TasksSortPolicy) -> Unit,
     onDeleteAllClick: (List<ToDoTask>) -> Unit,
 ) {
     TopAppBar(
@@ -88,7 +88,7 @@ private fun DefaultTasksAppBar(
             TasksAppBarActions(
                 tasks = tasks,
                 onSearchClick = onSearchClick,
-                onSortClick = onSortClick,
+                onSortPolicySelected = onSortPolicySelected,
                 onDeleteAllClick = onDeleteAllClick,
             )
         },
@@ -102,14 +102,14 @@ private fun DefaultTasksAppBar(
 private fun TasksAppBarActions(
     tasks: List<ToDoTask>,
     onSearchClick: () -> Unit,
-    onSortClick: (Priority) -> Unit,
+    onSortPolicySelected: (TasksSortPolicy) -> Unit,
     onDeleteAllClick: (List<ToDoTask>) -> Unit,
 ) {
     SearchAction(
         onSearchClick = onSearchClick,
     )
     SortAction(
-        onSortClick = onSortClick,
+        onSortPolicySelected = onSortPolicySelected,
     )
     if (tasks.isNotEmpty()) {
         DeleteAllAction(
@@ -136,7 +136,7 @@ private fun SearchAction(
 
 @Composable
 private fun SortAction(
-    onSortClick: (Priority) -> Unit,
+    onSortPolicySelected: (TasksSortPolicy) -> Unit,
 ) {
     var expanded: Boolean by remember { mutableStateOf(false) }
 
@@ -152,33 +152,18 @@ private fun SortAction(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            DropdownMenuItem(
-                text = {
-                    PriorityItem(Priority.HIGH)
-                },
-                onClick = {
-                    expanded = false
-                    onSortClick(Priority.HIGH)
-                },
-            )
-            DropdownMenuItem(
-                text = {
-                    PriorityItem(Priority.MEDIUM)
-                },
-                onClick = {
-                    expanded = false
-                    onSortClick(Priority.MEDIUM)
-                },
-            )
-            DropdownMenuItem(
-                text = {
-                    PriorityItem(Priority.LOW)
-                },
-                onClick = {
-                    expanded = false
-                    onSortClick(Priority.LOW)
-                },
-            )
+            val sortPolicies = TasksSortPolicy.entries
+            for (sortPolicy in sortPolicies) {
+                DropdownMenuItem(
+                    text = {
+                        SortPolicyItem(sortPolicy)
+                    },
+                    onClick = {
+                        expanded = false
+                        onSortPolicySelected(sortPolicy)
+                    },
+                )
+            }
         }
     }
 }
@@ -306,7 +291,7 @@ private fun DefaultTasksAppBarPreview() {
         DefaultTasksAppBar(
             tasks = emptyList(),
             onSearchClick = {},
-            onSortClick = {},
+            onSortPolicySelected = {},
             onDeleteAllClick = {},
         )
     }

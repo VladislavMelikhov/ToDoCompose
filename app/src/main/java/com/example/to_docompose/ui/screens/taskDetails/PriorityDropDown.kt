@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.example.to_docompose.R
 import com.example.to_docompose.data.models.Priority
-import com.example.to_docompose.ui.screens.tasksList.PriorityItem
 import com.example.to_docompose.ui.theme.ContentAlpha
 import com.example.to_docompose.ui.theme.LARGE_PADDING
 import com.example.to_docompose.ui.theme.PRIORITY_DROP_DOWN_HEIGHT

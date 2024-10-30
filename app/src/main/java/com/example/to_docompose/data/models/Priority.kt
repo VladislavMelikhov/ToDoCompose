@@ -9,22 +9,26 @@ import com.example.to_docompose.ui.theme.HoloYellow
 
 enum class Priority(
     val id: Int,
+    val importance: Int,
     val color: Color,
     @StringRes
     val titleId: Int,
 ) {
     HIGH(
         id = 0,
+        importance = 100,
         color = HoloRed,
         titleId = R.string.high,
     ),
     MEDIUM(
         id = 1,
+        importance = 101,
         color = HoloYellow,
         titleId = R.string.medium,
     ),
     LOW(
         id = 2,
+        importance = 102,
         color = HoloGreen,
         titleId = R.string.low,
     );
