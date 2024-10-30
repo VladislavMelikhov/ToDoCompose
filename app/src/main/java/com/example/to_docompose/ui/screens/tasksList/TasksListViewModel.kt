@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -51,6 +52,11 @@ class TasksListViewModel @Inject constructor(
     val tasks: StateFlow<List<ToDoTask>> =
         searchQuery
             .flatMapLatest(toDoTasksRepository::searchTasks)
+            .flatMapLatest { tasks ->
+                selectedSortPolicy.map { sortPolicy ->
+                    tasks.sortedWith(sortPolicy.comparator)
+                }
+            }
             .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     val selectedSortPolicy: StateFlow<TasksSortPolicy> =

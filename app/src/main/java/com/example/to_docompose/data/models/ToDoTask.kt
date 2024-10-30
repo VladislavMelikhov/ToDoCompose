@@ -5,4 +5,8 @@ data class ToDoTask(
     val title: String,
     val description: String,
     val priority: Priority,
-)
+) {
+
+    val importance: Int
+        get() = priority.importance
+}
