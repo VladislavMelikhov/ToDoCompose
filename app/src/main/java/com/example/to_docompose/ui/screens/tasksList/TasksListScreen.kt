@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.to_docompose.R
+import com.example.to_docompose.data.models.TasksSortPolicy
 import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.ui.components.ConfirmationDialog
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessage
@@ -73,6 +74,7 @@ fun TasksListScreen(
     val searchAppBarState: SearchAppBarState by viewModel.searchAppBarState.collectAsState()
     val searchQuery: String by viewModel.searchQuery.collectAsState()
     val tasks: List<ToDoTask> by viewModel.tasks.collectAsState()
+    val selectedSortPolicy: TasksSortPolicy by viewModel.selectedSortPolicy.collectAsState()
 
     val deleteAllConfirmationDialogState by viewModel.deleteAllConfirmationDialogState.collectAsState()
 
@@ -87,10 +89,12 @@ fun TasksListScreen(
                 tasks = tasks,
                 searchAppBarState = searchAppBarState,
                 searchQuery = searchQuery,
+                selectedSortPolicy = selectedSortPolicy,
                 onOpenSearchClick = viewModel::onOpenSearchClick,
                 onCloseSearchClick = viewModel::onCloseSearchClick,
                 onSearchQueryChange = viewModel::searchTasks,
                 onDeleteAllClick = viewModel::showDeleteAllConfirmationDialog,
+                onSortPolicySelected = viewModel::saveSortPolicy,
             )
         },
         content = { padding ->

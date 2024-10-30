@@ -3,7 +3,9 @@ package com.example.to_docompose.ui.screens.tasksList
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.to_docompose.data.models.TasksSortPolicy
 import com.example.to_docompose.data.models.ToDoTask
+import com.example.to_docompose.data.repositories.SettingsRepository
 import com.example.to_docompose.data.repositories.ToDoTasksRepository
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessage
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessageBus
@@ -24,6 +26,7 @@ class TasksListViewModel @Inject constructor(
     private val applicationScope: ApplicationScope,
     private val toDoTasksRepository: ToDoTasksRepository,
     private val taskMessageBus: TaskMessageBus,
+    private val settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
     companion object {
@@ -49,6 +52,11 @@ class TasksListViewModel @Inject constructor(
         searchQuery
             .flatMapLatest(toDoTasksRepository::searchTasks)
             .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    val selectedSortPolicy: StateFlow<TasksSortPolicy> =
+        settingsRepository
+            .sortPolicy
+            .stateIn(viewModelScope, SharingStarted.Lazily, TasksSortPolicy.DEFAULT)
 
     val taskMessage: StateFlow<TaskMessage?> =
         taskMessageBus.message
@@ -98,6 +106,12 @@ class TasksListViewModel @Inject constructor(
 
     fun hideDeleteAllConfirmationDialog() {
         _deleteAllConfirmationDialogState.value = TasksConfirmationDialogState.Hidden
+    }
+
+    fun saveSortPolicy(sortPolicy: TasksSortPolicy) {
+        applicationScope.launch {
+            settingsRepository.saveSortPolicy(sortPolicy)
+        }
     }
 
     override fun onCleared() {

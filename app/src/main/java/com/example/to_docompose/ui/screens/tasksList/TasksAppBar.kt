@@ -48,16 +48,19 @@ fun TasksAppBar(
     tasks: List<ToDoTask>,
     searchAppBarState: SearchAppBarState,
     searchQuery: String,
+    selectedSortPolicy: TasksSortPolicy,
     onOpenSearchClick: () -> Unit,
     onCloseSearchClick: () -> Unit,
     onSearchQueryChange: (String) -> Unit,
     onDeleteAllClick: (List<ToDoTask>) -> Unit,
+    onSortPolicySelected: (TasksSortPolicy) -> Unit,
 ) {
     when (searchAppBarState) {
         SearchAppBarState.CLOSED -> DefaultTasksAppBar(
             tasks = tasks,
+            selectedSortPolicy = selectedSortPolicy,
             onSearchClick = onOpenSearchClick,
-            onSortPolicySelected = {},
+            onSortPolicySelected = onSortPolicySelected,
             onDeleteAllClick = onDeleteAllClick,
         )
         SearchAppBarState.OPENED -> SearchTasksAppBar(
@@ -73,6 +76,7 @@ fun TasksAppBar(
 @Composable
 private fun DefaultTasksAppBar(
     tasks: List<ToDoTask>,
+    selectedSortPolicy: TasksSortPolicy,
     onSearchClick: () -> Unit,
     onSortPolicySelected: (TasksSortPolicy) -> Unit,
     onDeleteAllClick: (List<ToDoTask>) -> Unit,
@@ -87,6 +91,7 @@ private fun DefaultTasksAppBar(
         actions = {
             TasksAppBarActions(
                 tasks = tasks,
+                selectedSortPolicy = selectedSortPolicy,
                 onSearchClick = onSearchClick,
                 onSortPolicySelected = onSortPolicySelected,
                 onDeleteAllClick = onDeleteAllClick,
@@ -101,6 +106,7 @@ private fun DefaultTasksAppBar(
 @Composable
 private fun TasksAppBarActions(
     tasks: List<ToDoTask>,
+    selectedSortPolicy: TasksSortPolicy,
     onSearchClick: () -> Unit,
     onSortPolicySelected: (TasksSortPolicy) -> Unit,
     onDeleteAllClick: (List<ToDoTask>) -> Unit,
@@ -109,6 +115,7 @@ private fun TasksAppBarActions(
         onSearchClick = onSearchClick,
     )
     SortAction(
+        selectedSortPolicy = selectedSortPolicy,
         onSortPolicySelected = onSortPolicySelected,
     )
     if (tasks.isNotEmpty()) {
@@ -136,6 +143,7 @@ private fun SearchAction(
 
 @Composable
 private fun SortAction(
+    selectedSortPolicy: TasksSortPolicy,
     onSortPolicySelected: (TasksSortPolicy) -> Unit,
 ) {
     var expanded: Boolean by remember { mutableStateOf(false) }
@@ -144,7 +152,7 @@ private fun SortAction(
         onClick = { expanded = true },
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_filter_list),
+            painter = painterResource(selectedSortPolicy.iconId),
             contentDescription = stringResource(R.string.sort_tasks),
             tint = LocalCustomColorsPalette.current.topAppBarContentColor,
         )
@@ -156,7 +164,10 @@ private fun SortAction(
             for (sortPolicy in sortPolicies) {
                 DropdownMenuItem(
                     text = {
-                        SortPolicyItem(sortPolicy)
+                        SortPolicyItem(
+                            sortPolicy = sortPolicy,
+                            isSelected = (sortPolicy == selectedSortPolicy)
+                        )
                     },
                     onClick = {
                         expanded = false
@@ -290,6 +301,7 @@ private fun DefaultTasksAppBarPreview() {
     ComposeLocalWrapper {
         DefaultTasksAppBar(
             tasks = emptyList(),
+            selectedSortPolicy = TasksSortPolicy.DEFAULT,
             onSearchClick = {},
             onSortPolicySelected = {},
             onDeleteAllClick = {},

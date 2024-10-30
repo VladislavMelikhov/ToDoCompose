@@ -25,5 +25,14 @@ enum class TasksSortPolicy(
         id = 2,
         iconId = R.drawable.ic_filter_list,
         titleId = R.string.default_order,
-    ),
+    );
+
+    companion object {
+
+        private val valuesByIds: Map<Int, TasksSortPolicy> =
+            TasksSortPolicy.entries.associateBy(TasksSortPolicy::id)
+
+        fun fromId(id: Int): TasksSortPolicy =
+            valuesByIds[id] ?: DEFAULT
+    }
 }

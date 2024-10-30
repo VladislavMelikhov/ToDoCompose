@@ -11,4 +11,7 @@ interface RepositoriesModule {
 
     @Binds
     fun toDoTaskRepository(impl: ToDoTasksRepositoryImpl): ToDoTasksRepository
+
+    @Binds
+    fun settingsRepository(impl: SettingsRepositoryImpl): SettingsRepository
 }
