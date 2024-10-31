@@ -5,12 +5,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.to_docompose.R
 import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.ui.components.ConfirmationDialog
@@ -23,13 +23,13 @@ fun TaskDetailsScreen(
     viewModel: TaskDetailsViewModel = hiltViewModel(),
     navigateToTasksList: () -> Unit,
 ) {
-    val selectedTask by viewModel.selectedTask.collectAsState()
+    val selectedTask by viewModel.selectedTask.collectAsStateWithLifecycle()
 
-    val editedTitle by viewModel.editedTitle.collectAsState()
-    val editedDescription by viewModel.editedDescription.collectAsState()
-    val editedPriority by viewModel.editedPriority.collectAsState()
+    val editedTitle by viewModel.editedTitle.collectAsStateWithLifecycle()
+    val editedDescription by viewModel.editedDescription.collectAsStateWithLifecycle()
+    val editedPriority by viewModel.editedPriority.collectAsStateWithLifecycle()
 
-    val deleteConfirmationDialogState by viewModel.deleteConfirmationDialogState.collectAsState()
+    val deleteConfirmationDialogState by viewModel.deleteConfirmationDialogState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
 

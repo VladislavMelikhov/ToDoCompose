@@ -14,7 +14,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -23,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.to_docompose.R
 import com.example.to_docompose.data.models.TasksSortPolicy
 import com.example.to_docompose.data.models.ToDoTask
@@ -44,7 +44,7 @@ fun TasksListScreen(
 
     val context = LocalContext.current
 
-    val taskMessage: TaskMessage? by viewModel.taskMessage.collectAsState()
+    val taskMessage: TaskMessage? by viewModel.taskMessage.collectAsStateWithLifecycle()
     taskMessage?.let { message ->
         scope.launch {
             Log.d(TAG, "showSnackbar, message: $message")
@@ -71,12 +71,12 @@ fun TasksListScreen(
         viewModel.onTaskMessageHandled()
     }
 
-    val searchAppBarState: SearchAppBarState by viewModel.searchAppBarState.collectAsState()
-    val searchQuery: String by viewModel.searchQuery.collectAsState()
-    val tasks: List<ToDoTask> by viewModel.tasks.collectAsState()
-    val selectedSortPolicy: TasksSortPolicy by viewModel.selectedSortPolicy.collectAsState()
+    val searchAppBarState: SearchAppBarState by viewModel.searchAppBarState.collectAsStateWithLifecycle()
+    val searchQuery: String by viewModel.searchQuery.collectAsStateWithLifecycle()
+    val tasks: List<ToDoTask> by viewModel.tasks.collectAsStateWithLifecycle()
+    val selectedSortPolicy: TasksSortPolicy by viewModel.selectedSortPolicy.collectAsStateWithLifecycle()
 
-    val deleteAllConfirmationDialogState by viewModel.deleteAllConfirmationDialogState.collectAsState()
+    val deleteAllConfirmationDialogState by viewModel.deleteAllConfirmationDialogState.collectAsStateWithLifecycle()
 
     Scaffold(
         snackbarHost = {
