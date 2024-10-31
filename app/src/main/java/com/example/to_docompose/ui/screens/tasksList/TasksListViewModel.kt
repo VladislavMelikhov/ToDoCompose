@@ -71,6 +71,10 @@ class TasksListViewModel @Inject constructor(
         taskMessageBus.onMessageHandled()
     }
 
+    fun deleteTask(task: ToDoTask) {
+        deleteTasks(listOf(task))
+    }
+
     fun deleteTasks(tasks: List<ToDoTask>) {
         applicationScope.launch {
             val tasksIds = tasks.map(ToDoTask::id)

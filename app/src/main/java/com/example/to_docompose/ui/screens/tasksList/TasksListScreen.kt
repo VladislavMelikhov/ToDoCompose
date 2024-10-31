@@ -105,7 +105,8 @@ fun TasksListScreen(
             ) {
                 TasksListContent(
                     tasks = tasks,
-                    onTaskClick = navigateToTaskDetails,
+                    onTaskClick = { task -> navigateToTaskDetails(task.id) },
+                    onSwipeToDelete = viewModel::deleteTask,
                 )
             }
         },
