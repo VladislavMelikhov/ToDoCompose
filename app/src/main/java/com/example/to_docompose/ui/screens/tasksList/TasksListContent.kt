@@ -73,11 +73,16 @@ private fun TasksList(
                 tasks[index].id
             },
             itemContent = { index ->
-                SwipeableTasksListItem(
-                    toDoTask = tasks[index],
-                    onTaskClick = onTaskClick,
-                    onSwipeToDelete = onSwipeToDelete,
-                )
+                Row(
+                    modifier = Modifier
+                        .animateItem(),
+                ) {
+                    SwipeableTasksListItem(
+                        toDoTask = tasks[index],
+                        onTaskClick = onTaskClick,
+                        onSwipeToDelete = onSwipeToDelete,
+                    )
+                }
             }
         )
     }
