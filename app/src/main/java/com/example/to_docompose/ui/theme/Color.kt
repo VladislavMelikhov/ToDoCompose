@@ -33,6 +33,12 @@ data class CustomColorsPalette(
 ) {
     val statusBarColor: Color
         get() = topAppBarBackgroundColor
+
+    val splashBackgroundColor: Color
+        get() = topAppBarBackgroundColor
+
+    val splashContentColor: Color
+        get() = topAppBarContentColor
 }
 
 val LightCustomColorsPalette = CustomColorsPalette(
