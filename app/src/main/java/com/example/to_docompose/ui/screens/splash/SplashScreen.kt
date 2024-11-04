@@ -20,5 +20,5 @@ fun SplashScreen(
         viewModel.onNavigatedFromSplash()
     }
 
-    SplashContent()
+    AnimatedSplashContent()
 }
