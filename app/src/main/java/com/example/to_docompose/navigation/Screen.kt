@@ -4,6 +4,10 @@ import com.example.to_docompose.ui.screens.taskDetails.TASK_DETAILS_ARG_KEY
 
 sealed class Screen(val route: String) {
 
+    data object Splash : Screen("splash") {
+        fun routeToNavigate() = "splash"
+    }
+
     data object TasksList : Screen("tasks_list") {
         fun routeToNavigate() = "tasks_list"
     }
