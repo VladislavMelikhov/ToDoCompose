@@ -1,5 +1,7 @@
 package com.example.to_docompose.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -11,6 +13,8 @@ import com.example.to_docompose.ui.screens.taskDetails.TASK_DETAILS_ARG_KEY
 import com.example.to_docompose.ui.screens.taskDetails.TaskDetailsScreen
 import com.example.to_docompose.ui.screens.tasksList.TasksListScreen
 
+private const val ANIMATION_DURATION = 300
+
 @Composable
 fun SetupNavGraph(
     navController: NavHostController,
@@ -21,6 +25,9 @@ fun SetupNavGraph(
     ) {
         composable(
             route = Screen.Splash.route,
+            exitTransition = {
+                slideOutOfContainer(SlideDirection.Up)
+            }
         ) {
             SplashScreen(
                 navigateToTasksList = {
@@ -43,7 +50,10 @@ fun SetupNavGraph(
         }
         composable(
             route = Screen.TaskDetails.route,
-            arguments = listOf(navArgument(TASK_DETAILS_ARG_KEY) { type = NavType.IntType })
+            arguments = listOf(navArgument(TASK_DETAILS_ARG_KEY) { type = NavType.IntType }),
+            enterTransition = {
+                slideIntoContainer(SlideDirection.Start, tween(ANIMATION_DURATION))
+            }
         ) {
             TaskDetailsScreen(
                 navigateToTasksList = {
