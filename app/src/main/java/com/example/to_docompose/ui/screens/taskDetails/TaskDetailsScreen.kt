@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -30,13 +33,13 @@ fun TaskDetailsScreen(
     val editedDescription by viewModel.editedDescription.collectAsStateWithLifecycle()
     val editedPriority by viewModel.editedPriority.collectAsStateWithLifecycle()
 
-    val deleteConfirmationDialogState by viewModel.deleteConfirmationDialogState.collectAsStateWithLifecycle()
-    val exitConfirmationDialogState by viewModel.exitConfirmationDialogState.collectAsStateWithLifecycle()
+    var deleteConfirmationDialogState by remember { mutableStateOf(false) }
+    var exitConfirmationDialogState by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
     BackHandler(enabled = true) {
-        viewModel.showExitConfirmationDialog()
+        exitConfirmationDialogState = true
     }
 
     Scaffold(
@@ -44,7 +47,7 @@ fun TaskDetailsScreen(
             TaskDetailsAppBar(
                 selectedTask = selectedTask,
                 onBackClick = {
-                    viewModel.showExitConfirmationDialog()
+                    exitConfirmationDialogState = true
                 },
                 onAddClick = {
                     val newTask = ToDoTask(
@@ -64,7 +67,7 @@ fun TaskDetailsScreen(
                     navigateToTasksList()
                 },
                 onCloseClick = {
-                    viewModel.showExitConfirmationDialog()
+                    exitConfirmationDialogState = true
                 },
                 onUpdateClick = { taskId ->
                     val editedTask = ToDoTask(
@@ -85,8 +88,8 @@ fun TaskDetailsScreen(
                     }
                     navigateToTasksList()
                 },
-                onDeleteClick = { originalTask ->
-                    viewModel.showDeleteConfirmationDialog(originalTask)
+                onDeleteClick = { _ ->
+                    deleteConfirmationDialogState = true
                 },
             )
         },
@@ -108,37 +111,30 @@ fun TaskDetailsScreen(
         },
     )
 
-    when (val state = deleteConfirmationDialogState) {
-        is TaskConfirmationDialogState.Shown -> {
-            val originalTask = state.task
-            ConfirmationDialog(
-                title = stringResource(R.string.confirm_delete_title),
-                message = stringResource(R.string.confirm_delete_message),
-                onActionConfirmed = {
-                    viewModel.deleteTask(originalTask)
-                    navigateToTasksList()
-                },
-                onCloseRequest = {
-                    viewModel.hideDeleteConfirmationDialog()
-                },
-            )
-        }
-        is TaskConfirmationDialogState.Hidden -> {}
+    if (deleteConfirmationDialogState) {
+        ConfirmationDialog(
+            title = stringResource(R.string.confirm_delete_title),
+            message = stringResource(R.string.confirm_delete_message),
+            onActionConfirmed = {
+                selectedTask?.let(viewModel::deleteTask)
+                navigateToTasksList()
+            },
+            onCloseRequest = {
+                deleteConfirmationDialogState = false
+            },
+        )
     }
-    when (exitConfirmationDialogState) {
-        is ConfirmationDialogState.Shown -> {
-            ConfirmationDialog(
-                title = stringResource(R.string.confirm_exit_title),
-                message = stringResource(R.string.confirm_exit_message),
-                onActionConfirmed = {
-                    navigateToTasksList()
-                },
-                onCloseRequest = {
-                    viewModel.hideExitConfirmationDialog()
-                },
-            )
-        }
-        is ConfirmationDialogState.Hidden -> {}
+    if (exitConfirmationDialogState) {
+        ConfirmationDialog(
+            title = stringResource(R.string.confirm_exit_title),
+            message = stringResource(R.string.confirm_exit_message),
+            onActionConfirmed = {
+                navigateToTasksList()
+            },
+            onCloseRequest = {
+                exitConfirmationDialogState = false
+            },
+        )
     }
 }
 
