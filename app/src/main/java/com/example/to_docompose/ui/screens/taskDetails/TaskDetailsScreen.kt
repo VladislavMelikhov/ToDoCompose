@@ -1,5 +1,6 @@
 package com.example.to_docompose.ui.screens.taskDetails
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -30,15 +31,20 @@ fun TaskDetailsScreen(
     val editedPriority by viewModel.editedPriority.collectAsStateWithLifecycle()
 
     val deleteConfirmationDialogState by viewModel.deleteConfirmationDialogState.collectAsStateWithLifecycle()
+    val exitConfirmationDialogState by viewModel.exitConfirmationDialogState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
+
+    BackHandler(enabled = true) {
+        viewModel.showExitConfirmationDialog()
+    }
 
     Scaffold(
         topBar = {
             TaskDetailsAppBar(
                 selectedTask = selectedTask,
                 onBackClick = {
-                    navigateToTasksList()
+                    viewModel.showExitConfirmationDialog()
                 },
                 onAddClick = {
                     val newTask = ToDoTask(
@@ -58,7 +64,7 @@ fun TaskDetailsScreen(
                     navigateToTasksList()
                 },
                 onCloseClick = {
-                    navigateToTasksList()
+                    viewModel.showExitConfirmationDialog()
                 },
                 onUpdateClick = { taskId ->
                     val editedTask = ToDoTask(
@@ -118,6 +124,21 @@ fun TaskDetailsScreen(
             )
         }
         is TaskConfirmationDialogState.Hidden -> {}
+    }
+    when (exitConfirmationDialogState) {
+        is ConfirmationDialogState.Shown -> {
+            ConfirmationDialog(
+                title = stringResource(R.string.confirm_exit_title),
+                message = stringResource(R.string.confirm_exit_message),
+                onActionConfirmed = {
+                    navigateToTasksList()
+                },
+                onCloseRequest = {
+                    viewModel.hideExitConfirmationDialog()
+                },
+            )
+        }
+        is ConfirmationDialogState.Hidden -> {}
     }
 }
 
