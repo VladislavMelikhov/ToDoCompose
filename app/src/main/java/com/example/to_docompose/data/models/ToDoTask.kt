@@ -9,4 +9,15 @@ data class ToDoTask(
 
     val importance: Int
         get() = priority.importance
+
+    companion object {
+
+        fun empty(id: Int = 0): ToDoTask =
+            ToDoTask(
+                id = id,
+                title = "",
+                description = "",
+                priority = Priority.MEDIUM,
+            )
+    }
 }

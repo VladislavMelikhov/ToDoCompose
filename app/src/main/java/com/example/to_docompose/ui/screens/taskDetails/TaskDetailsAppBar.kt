@@ -23,24 +23,24 @@ import com.example.to_docompose.ui.theme.ToDoComposeTheme
 
 @Composable
 fun TaskDetailsAppBar(
-    selectedTask: ToDoTask?,
+    selectedTask: ToDoTask,
     onBackClick: () -> Unit,
     onAddClick: () -> Unit,
     onCloseClick: () -> Unit,
     onDeleteClick: (ToDoTask) -> Unit,
     onUpdateClick: (taskId: Int) -> Unit,
 ) {
-    if (selectedTask == null) {
-        NewTaskAppBar(
-            onBackClick = onBackClick,
-            onAddClick = onAddClick,
-        )
-    } else {
+    if (selectedTask.id > 0) {
         ExistingTaskAppBar(
             task = selectedTask,
             onCloseClick = onCloseClick,
             onDeleteClick = onDeleteClick,
             onUpdateClick = onUpdateClick,
+        )
+    } else {
+        NewTaskAppBar(
+            onBackClick = onBackClick,
+            onAddClick = onAddClick,
         )
     }
 }

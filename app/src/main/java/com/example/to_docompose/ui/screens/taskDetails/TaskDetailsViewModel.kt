@@ -10,6 +10,7 @@ import com.example.to_docompose.data.repositories.ToDoTasksRepository
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessage
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessageBus
 import com.example.to_docompose.utils.coroutines.ApplicationScope
+import com.example.to_docompose.utils.coroutines.combineState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -41,23 +42,19 @@ class TaskDetailsViewModel @Inject constructor(
     private val _selectedTaskId: Int =
         requireNotNull(savedStateHandle[TASK_DETAILS_ARG_KEY])
 
-    val selectedTask: StateFlow<ToDoTask?> =
+    val originalTask: StateFlow<ToDoTask> =
         flow {
             if (_selectedTaskId > 0) {
-                val selectedTask = toDoTasksRepository.getTask(_selectedTaskId)
-                emit(selectedTask)
-            } else {
-                emit(null)
+                val task = toDoTasksRepository.getTask(_selectedTaskId)
+                emit(task)
             }
         }
             .onEach { task ->
-                if (task != null) {
-                    setEditedTitle(task.title)
-                    setEditedDescription(task.description)
-                    setEditedPriority(task.priority)
-                }
+                setEditedTitle(task.title)
+                setEditedDescription(task.description)
+                setEditedPriority(task.priority)
             }
-            .stateIn(viewModelScope, SharingStarted.Lazily, null)
+            .stateIn(viewModelScope, SharingStarted.Lazily, ToDoTask.empty(id = _selectedTaskId))
 
     private val _editedTitle: MutableStateFlow<String> = MutableStateFlow("")
     val editedTitle: StateFlow<String> = _editedTitle
@@ -67,6 +64,24 @@ class TaskDetailsViewModel @Inject constructor(
 
     private val _editedPriority: MutableStateFlow<Priority> = MutableStateFlow(Priority.MEDIUM)
     val editedPriority: StateFlow<Priority> = _editedPriority
+
+    val editedTask: StateFlow<ToDoTask> =
+        combineState(_editedTitle, _editedDescription, _editedPriority,
+            viewModelScope, SharingStarted.Lazily
+        ) { title, description, priority ->
+            ToDoTask(
+                id = _selectedTaskId,
+                title = title,
+                description = description,
+                priority = priority,
+            )
+        }
+    
+    private val _exitConfirmationVisibility: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val exitConfirmationVisibility: StateFlow<Boolean> = _exitConfirmationVisibility
+
+    private val _deleteConfirmationVisibility: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val deleteConfirmationVisibility: StateFlow<Boolean> = _deleteConfirmationVisibility
 
     fun setEditedTitle(title: String) {
         _editedTitle.value = title.take(TITLE_MAX_LENGTH)
@@ -82,7 +97,7 @@ class TaskDetailsViewModel @Inject constructor(
 
     fun addTask(task: ToDoTask) {
         applicationScope.launch {
-            toDoTasksRepository.addTask(task)
+            toDoTasksRepository.addTask(task.copy(id = 0))
             taskMessageBus.sendMessage(
                 TaskMessage.TaskAdded(taskTitle = task.title)
             )
@@ -105,6 +120,22 @@ class TaskDetailsViewModel @Inject constructor(
                 TaskMessage.TasksDeleted(tasks = listOf(originalTask))
             )
         }
+    }
+
+    fun showDeleteConfirmation() {
+        _deleteConfirmationVisibility.value = true
+    }
+    
+    fun hideDeleteConfirmation() {
+        _deleteConfirmationVisibility.value = false
+    }
+
+    fun showExitConfirmation() {
+        _exitConfirmationVisibility.value = true
+    }
+
+    fun hideExitConfirmation() {
+        _exitConfirmationVisibility.value = false
     }
 
     override fun onCleared() {

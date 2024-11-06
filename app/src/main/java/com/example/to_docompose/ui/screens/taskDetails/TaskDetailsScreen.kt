@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.to_docompose.R
 import com.example.to_docompose.data.models.ToDoTask
@@ -27,69 +25,66 @@ fun TaskDetailsScreen(
     viewModel: TaskDetailsViewModel = hiltViewModel(),
     navigateToTasksList: () -> Unit,
 ) {
-    val selectedTask by viewModel.selectedTask.collectAsStateWithLifecycle()
+    val originalTask by viewModel.originalTask.collectAsStateWithLifecycle()
 
     val editedTitle by viewModel.editedTitle.collectAsStateWithLifecycle()
     val editedDescription by viewModel.editedDescription.collectAsStateWithLifecycle()
     val editedPriority by viewModel.editedPriority.collectAsStateWithLifecycle()
+    val editedTask by viewModel.editedTask.collectAsStateWithLifecycle()
 
-    var deleteConfirmationDialogState by remember { mutableStateOf(false) }
-    var exitConfirmationDialogState by remember { mutableStateOf(false) }
+    val exitConfirmationVisibility by viewModel.exitConfirmationVisibility
+        .collectAsStateWithLifecycle(minActiveState = Lifecycle.State.CREATED)
+    val deleteConfirmationVisibility by viewModel.deleteConfirmationVisibility
+        .collectAsStateWithLifecycle(minActiveState = Lifecycle.State.CREATED)
 
     val context = LocalContext.current
 
+    fun safeNavigateToTasksList() {
+        if (editedTask != originalTask) {
+            viewModel.showExitConfirmation()
+        } else {
+            navigateToTasksList()
+        }
+    }
+
     BackHandler(enabled = true) {
-        exitConfirmationDialogState = true
+        safeNavigateToTasksList()
     }
 
     Scaffold(
         topBar = {
             TaskDetailsAppBar(
-                selectedTask = selectedTask,
+                selectedTask = originalTask,
                 onBackClick = {
-                    exitConfirmationDialogState = true
+                    safeNavigateToTasksList()
                 },
                 onAddClick = {
-                    val newTask = ToDoTask(
-                        id = 0,
-                        title = editedTitle,
-                        description = editedDescription,
-                        priority = editedPriority,
-                    )
-
-                    val validationResult = validateFields(newTask)
-                    if (validationResult is ValidationResult.Error) {
-                        ToastManager.showShort(context, validationResult.messageId)
-                        return@TaskDetailsAppBar
-                    }
-
-                    viewModel.addTask(newTask)
-                    navigateToTasksList()
-                },
-                onCloseClick = {
-                    exitConfirmationDialogState = true
-                },
-                onUpdateClick = { taskId ->
-                    val editedTask = ToDoTask(
-                        id = taskId,
-                        title = editedTitle,
-                        description = editedDescription,
-                        priority = editedPriority,
-                    )
-
                     val validationResult = validateFields(editedTask)
                     if (validationResult is ValidationResult.Error) {
                         ToastManager.showShort(context, validationResult.messageId)
                         return@TaskDetailsAppBar
                     }
 
-                    if (editedTask != selectedTask) {
+                    viewModel.addTask(editedTask)
+                    navigateToTasksList()
+                },
+                onCloseClick = {
+                    safeNavigateToTasksList()
+                },
+                onUpdateClick = { _ ->
+                    val validationResult = validateFields(editedTask)
+                    if (validationResult is ValidationResult.Error) {
+                        ToastManager.showShort(context, validationResult.messageId)
+                        return@TaskDetailsAppBar
+                    }
+
+                    if (editedTask != originalTask) {
                         viewModel.updateTask(editedTask)
                     }
                     navigateToTasksList()
                 },
                 onDeleteClick = { _ ->
-                    deleteConfirmationDialogState = true
+                    viewModel.showDeleteConfirmation()
                 },
             )
         },
@@ -111,20 +106,20 @@ fun TaskDetailsScreen(
         },
     )
 
-    if (deleteConfirmationDialogState) {
+    if (deleteConfirmationVisibility) {
         ConfirmationDialog(
             title = stringResource(R.string.confirm_delete_title),
             message = stringResource(R.string.confirm_delete_message),
             onActionConfirmed = {
-                selectedTask?.let(viewModel::deleteTask)
+                viewModel.deleteTask(originalTask)
                 navigateToTasksList()
             },
             onCloseRequest = {
-                deleteConfirmationDialogState = false
+                viewModel.hideDeleteConfirmation()
             },
         )
     }
-    if (exitConfirmationDialogState) {
+    if (exitConfirmationVisibility) {
         ConfirmationDialog(
             title = stringResource(R.string.confirm_exit_title),
             message = stringResource(R.string.confirm_exit_message),
@@ -132,7 +127,7 @@ fun TaskDetailsScreen(
                 navigateToTasksList()
             },
             onCloseRequest = {
-                exitConfirmationDialogState = false
+                viewModel.hideExitConfirmation()
             },
         )
     }
