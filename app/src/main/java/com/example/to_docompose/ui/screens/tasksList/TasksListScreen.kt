@@ -48,6 +48,7 @@ fun TasksListScreen(
     taskMessage?.let { message ->
         scope.launch {
             Log.d(TAG, "showSnackbar, message: $message")
+            snackbarHostState.currentSnackbarData?.dismiss()
             when (message) {
                 is TaskMessage.TaskAdded,
                 is TaskMessage.TaskUpdated,

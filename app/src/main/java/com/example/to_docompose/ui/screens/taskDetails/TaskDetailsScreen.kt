@@ -47,7 +47,7 @@ fun TaskDetailsScreen(
         }
     }
 
-    BackHandler(enabled = true) {
+    BackHandler {
         safeNavigateToTasksList()
     }
 
