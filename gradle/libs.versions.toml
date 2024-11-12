@@ -4,6 +4,7 @@ datastorePreferences = "1.1.1"
 hiltAndroid = "2.48"
 hiltNavigationCompose = "1.2.0"
 kotlin = "1.9.0"
+ksp = "1.9.0-1.0.13"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -43,6 +44,6 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3",
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 google-dagger-hilt-android = { id  = 'com.google.dagger.hilt.android', version.ref = "hiltAndroid" }
 
