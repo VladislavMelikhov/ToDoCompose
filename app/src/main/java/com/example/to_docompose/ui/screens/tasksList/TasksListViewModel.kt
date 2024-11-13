@@ -57,12 +57,12 @@ class TasksListViewModel @Inject constructor(
                     tasks.sortedWith(sortPolicy.comparator)
                 }
             }
-            .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+            .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     val selectedSortPolicy: StateFlow<TasksSortPolicy> =
         settingsRepository
             .sortPolicy
-            .stateIn(viewModelScope, SharingStarted.Lazily, TasksSortPolicy.DEFAULT)
+            .stateIn(viewModelScope, SharingStarted.Eagerly, TasksSortPolicy.DEFAULT)
 
     val taskMessage: StateFlow<TaskMessage?> =
         taskMessageBus.message

@@ -59,7 +59,7 @@ class TaskDetailsViewModel @Inject constructor(
                 setEditedDescription(task.description)
                 setEditedPriority(task.priority)
             }
-            .stateIn(viewModelScope, SharingStarted.Lazily, ToDoTask.empty(id = _selectedTaskId))
+            .stateIn(viewModelScope, SharingStarted.Eagerly, ToDoTask.empty(id = _selectedTaskId))
 
     private val _editedTitle: MutableStateFlow<String> = MutableStateFlow("")
     val editedTitle: StateFlow<String> = _editedTitle
@@ -72,7 +72,7 @@ class TaskDetailsViewModel @Inject constructor(
 
     val editedTask: StateFlow<ToDoTask> =
         combineState(_editedTitle, _editedDescription, _editedPriority,
-            viewModelScope, SharingStarted.Lazily
+            viewModelScope, SharingStarted.Eagerly
         ) { title, description, priority ->
             ToDoTask(
                 id = _selectedTaskId,
