@@ -18,8 +18,6 @@ import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.ui.components.ConfirmationDialog
 import com.example.to_docompose.utils.ToastManager
 
-const val TASK_DETAILS_ARG_KEY = "taskId"
-
 @Composable
 fun TaskDetailsScreen(
     viewModel: TaskDetailsViewModel = hiltViewModel(),

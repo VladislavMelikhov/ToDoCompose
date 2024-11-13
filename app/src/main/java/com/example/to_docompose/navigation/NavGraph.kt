@@ -4,12 +4,9 @@ import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.example.to_docompose.ui.screens.splash.SplashScreen
-import com.example.to_docompose.ui.screens.taskDetails.TASK_DETAILS_ARG_KEY
 import com.example.to_docompose.ui.screens.taskDetails.TaskDetailsScreen
 import com.example.to_docompose.ui.screens.tasksList.TasksListScreen
 
@@ -21,43 +18,38 @@ fun SetupNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Splash.route,
+        startDestination = Screen.Splash,
     ) {
-        composable(
-            route = Screen.Splash.route,
+        composable<Screen.Splash>(
             exitTransition = {
                 slideOutOfContainer(SlideDirection.Up)
             }
         ) {
             SplashScreen(
                 navigateToTasksList = {
-                    navController.navigate(Screen.TasksList.routeToNavigate()) {
-                        popUpTo(Screen.Splash.routeToNavigate()) {
+                    navController.navigate(Screen.TasksList) {
+                        popUpTo(Screen.Splash) {
                             inclusive = true
                         }
                     }
                 },
             )
         }
-        composable(
-            route = Screen.TasksList.route,
-        ) {
+        composable<Screen.TasksList> {
             TasksListScreen(
                 navigateToTaskDetails = { taskId ->
-                    navController.navigate(Screen.TaskDetails.routeToNavigate(taskId))
+                    navController.navigate(Screen.TaskDetails(taskId))
                 },
             )
         }
-        composable(
-            route = Screen.TaskDetails.route,
-            arguments = listOf(navArgument(TASK_DETAILS_ARG_KEY) { type = NavType.IntType }),
+        composable<Screen.TaskDetails>(
             enterTransition = {
                 slideIntoContainer(SlideDirection.Start, tween(ANIMATION_DURATION))
             }
         ) {
             TaskDetailsScreen(
                 navigateToTasksList = {
-                    navController.popBackStack(Screen.TasksList.routeToNavigate(), inclusive = false)
+                    navController.popBackStack(Screen.TasksList, inclusive = false)
                 },
             )
         }

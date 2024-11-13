@@ -1,18 +1,16 @@
 package com.example.to_docompose.navigation
 
-import com.example.to_docompose.ui.screens.taskDetails.TASK_DETAILS_ARG_KEY
+import kotlinx.serialization.Serializable
 
-sealed class Screen(val route: String) {
+@Serializable
+sealed interface Screen {
 
-    data object Splash : Screen("splash") {
-        fun routeToNavigate() = "splash"
-    }
+    @Serializable
+    data object Splash : Screen
 
-    data object TasksList : Screen("tasks_list") {
-        fun routeToNavigate() = "tasks_list"
-    }
+    @Serializable
+    data object TasksList : Screen
 
-    data object TaskDetails : Screen("task_details/{$TASK_DETAILS_ARG_KEY}") {
-        fun routeToNavigate(taskId: Int) = "task_details/$taskId"
-    }
+    @Serializable
+    data class TaskDetails(val taskId: Int) : Screen
 }

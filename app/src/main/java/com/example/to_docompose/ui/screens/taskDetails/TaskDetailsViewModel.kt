@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.example.to_docompose.data.models.Priority
 import com.example.to_docompose.data.models.ToDoTask
 import com.example.to_docompose.data.repositories.ToDoTasksRepository
+import com.example.to_docompose.navigation.Screen
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessage
 import com.example.to_docompose.ui.screens.tasksList.message.TaskMessageBus
 import com.example.to_docompose.utils.coroutines.ApplicationScope
@@ -39,8 +41,11 @@ class TaskDetailsViewModel @Inject constructor(
         Log.d(TAG, "init")
     }
 
+    private val _args: Screen.TaskDetails =
+        savedStateHandle.toRoute()
+
     private val _selectedTaskId: Int =
-        requireNotNull(savedStateHandle[TASK_DETAILS_ARG_KEY])
+        _args.taskId
 
     val originalTask: StateFlow<ToDoTask> =
         flow {
